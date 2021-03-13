@@ -1,0 +1,32 @@
+class Solution {
+    public int[][] intervalIntersection(int[][] firstList, int[][] secondList) {
+        List<List<Integer>>ref=new ArrayList<>();
+        int firstCount=0;
+        int secondCount=0;
+        List<Integer>interset=new ArrayList<>();
+        while(firstCount<firstList.length&&secondCount<secondList.length)
+        {
+            if(secondList[secondCount][0]>firstList[firstCount][1])
+                firstCount++;
+            else if(firstList[firstCount][0]>secondList[secondCount][1])
+                secondCount++;
+            else
+            {
+                interset=Arrays.asList(Math.max(firstList[firstCount][0],secondList[secondCount][0]),Math.min(firstList[firstCount][1],secondList[secondCount][1]));
+                ref.add(interset);
+                if(secondList[secondCount][1]>firstList[firstCount][1])
+                    firstCount++;
+                else
+                    secondCount++;
+            }
+        }
+        
+        int[][]result=new int[ref.size()][2];
+        for(int i=0;i<result.length;i++)
+        {
+            result[i][0]=ref.get(i).get(0);
+            result[i][1]=ref.get(i).get(1);
+        }
+        return result;
+    }
+}
