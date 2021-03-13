@@ -1,0 +1,29 @@
+class Solution {
+    public int[][] merge(int[][] intervals) {
+        Arrays.sort(intervals,(int[]a, int[]b)->(a[0]-b[0]));
+        int counter=0;
+        int i=0;
+        while(i<intervals.length)
+        {
+            if(intervals[counter][1]<intervals[i][0])
+            {
+                counter++;
+                intervals[counter][0]=intervals[i][0];
+                intervals[counter][1]=intervals[i][1];
+            }
+            else
+            {
+                intervals[counter][0]=Math.min(intervals[counter][0],intervals[i][0]);
+                intervals[counter][1]=Math.max(intervals[counter][1],intervals[i][1]);
+                i++;
+            }
+        }
+        int[][]result=new int[counter+1][2];
+        for(i=0;i<result.length;i++)
+        {
+            result[i][0]=intervals[i][0];
+            result[i][1]=intervals[i][1];
+        }
+        return result;
+    }
+}
