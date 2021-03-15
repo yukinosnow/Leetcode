@@ -1,0 +1,49 @@
+class Solution {
+    public int minMeetingRooms(int[][] intervals) {
+        PriorityQueue<List<Integer>>rooms=new PriorityQueue<>(intervals.length,(List<Integer>a, List<Integer>b)->(a.get(1)-b.get(1)));
+        Arrays.sort(intervals,(int[]a, int[]b)->(a[0]-b[0]));
+        for(int i=0;i<intervals.length;i++)
+        {
+            List<Integer> room=rooms.peek();
+            if(room!=null&&room.get(1)<=intervals[i][0])
+            {
+                room=rooms.poll();
+                room.set(1,intervals[i][1]);
+                rooms.add(room);
+            }
+            else
+            {
+                List<Integer>newRoom=Arrays.asList(intervals[i][0],intervals[i][1]);
+                rooms.add(newRoom);
+            }
+        }
+        return rooms.size();
+    }
+}
+
+class Solution {
+    public int minMeetingRooms(int[][] intervals) {
+        List<List<Integer>>rooms=new ArrayList<>();
+        Arrays.sort(intervals,(int[]a, int[]b)->(a[0]-b[0]));
+        for(int i=0;i<intervals.length;i++)
+        {
+            boolean added=false;
+            for(int j=0;j<rooms.size();j++)
+            {
+                List<Integer>room=rooms.get(j);
+                if(room.get(1)<=intervals[i][0])
+                {
+                    room.set(1,intervals[i][1]);
+                    added=true;
+                    break;
+                }
+            }
+            if(!added)
+            {
+                List<Integer>room=Arrays.asList(intervals[i][0],intervals[i][1]);
+                rooms.add(room);
+            }
+        }
+        return rooms.size();
+    }
+}
