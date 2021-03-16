@@ -1,0 +1,26 @@
+class Solution {
+    public Node lowestCommonAncestor(Node p, Node q) {
+        Node a=p;
+        Node b=q;
+        boolean aRev=false;
+        boolean bRev=false;
+        while(a!=null&&b!=null)
+        {
+            if(a!=null&&b!=null&&a.val==b.val)
+                return a;
+            a=a.parent;
+            b=b.parent;
+            if(a==null&&!aRev)
+            {
+                a=q;
+                aRev=true;
+            }
+            if(b==null&&!bRev)
+            {
+                b=p;
+                bRev=true;
+            }
+        }
+        return null;
+    }
+}
