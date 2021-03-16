@@ -1,0 +1,29 @@
+class Solution {
+    private TreeNode result=null;
+    public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+        if(root==null)
+            return null;
+        helper(root,p,q);
+        return result;
+    }
+    public boolean helper(TreeNode node, TreeNode p, TreeNode q)
+    {
+        if(node==null)
+            return false;
+        boolean mid=false;
+        boolean left=false;
+        boolean right=false;
+        if(node==p||node==q)
+        {
+            mid=true;
+        }
+        left=helper(node.left,p,q);
+        right=helper(node.right,p,q);
+        if((left&&right)||(left&&mid)||(right&&mid))
+        {
+            result=node;
+            return false;
+        }
+        return mid||left||right;
+    }
+}
