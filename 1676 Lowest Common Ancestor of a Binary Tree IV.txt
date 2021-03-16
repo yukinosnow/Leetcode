@@ -1,0 +1,21 @@
+class Solution {
+    TreeNode res = null;
+
+    public TreeNode lowestCommonAncestor(TreeNode root, TreeNode[] nodes) {
+        Set<Integer> set = new HashSet<>();
+        for (TreeNode node : nodes) set.add(node.val);
+
+        postorder(root, set);
+        return res;
+    }
+
+    public int postorder(TreeNode root, Set<Integer> set) {
+        if (root == null) return 0;
+
+        int found = postorder(root.left, set);
+        found += postorder(root.right, set);
+        if (set.contains(root.val)) found++;
+        if (found == set.size() && res == null) res = root;
+        return found;
+    }
+}
