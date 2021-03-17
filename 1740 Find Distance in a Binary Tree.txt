@@ -1,0 +1,28 @@
+class Solution {
+    int result=0;
+    public int findDistance(TreeNode root, int p, int q) {
+        if(p==q)
+            return 0;
+        helper(root,p,q);
+        return result-2;
+        
+    }
+    public int helper(TreeNode node, int p, int q)
+    {
+        if(node==null)
+            return 0;
+        TreeNode temp=node;
+        int mid=0;
+        int left=0;
+        int right=0;
+        if(node.val==p||node.val==q)
+            mid=1;
+        left=helper(node.left,p,q);
+        right=helper(node.right,p,q);
+        if((mid!=0&&left!=0)||(mid!=0&&right!=0)||(left!=0&&right!=0)&&result==0)
+            result=mid+left+right;
+        if(mid+left+right==0)
+            return 0;
+        return mid+left+right+1;
+    }
+}
