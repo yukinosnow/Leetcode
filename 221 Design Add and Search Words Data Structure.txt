@@ -1,0 +1,95 @@
+class WordDictionary {
+    class Node{
+        public char letter;
+        public Map<Character,Node>nextLetter;
+        public boolean end;
+        public Node(char letter)
+        {
+            this.letter=letter;
+            nextLetter=new HashMap<>();
+            end=false;
+        }
+    }
+    Map<Character,Node>ref;
+    /** Initialize your data structure here. */
+    public WordDictionary() {
+        ref=new HashMap<>();
+    }
+    
+    public void addWord(String word) {
+        char[]letters=word.toCharArray();
+        if(letters.length==0)
+            return;
+        if(!ref.containsKey(letters[0]))
+            ref.put(letters[0],new Node(letters[0]));
+        Node curr=ref.get(letters[0]);
+        if(letters.length==1)
+        {
+            curr.end=true;
+            return;
+        }
+        for(int i=1;i<letters.length;i++)
+        {
+            if(!curr.nextLetter.containsKey(letters[i]))
+                curr.nextLetter.put(letters[i],new Node(letters[i]));
+            curr=curr.nextLetter.get(letters[i]);
+            if(i==letters.length-1)
+                curr.end=true;
+        }
+    }
+    
+    public boolean search(String word) {
+        char[]letters=word.toCharArray();
+        if(letters.length==0)
+            return true;
+        if(letters[0]=='.')
+        {
+            for(Map.Entry<Character,Node>entry:ref.entrySet())
+            {
+                if(FindLetter(entry.getValue(),letters,1))
+                    return true;
+            }
+            return false;
+        }
+        if(!ref.containsKey(letters[0]))
+            return false;
+        if(letters.length==1)
+        {
+            if(ref.get(letters[0]).end)
+                return true;
+            return false;
+        }
+        return FindLetter(ref.get(letters[0]),letters,1);
+    }
+    public boolean FindLetter(Node curr,char[] letters,int count)
+    {
+        //System.out.println(curr.letter+"    "+curr.end);
+        if(count==letters.length)
+        {
+            if(curr.end)
+                return true;
+            return false;
+        }
+        if(letters[count]=='.')
+        {
+            for(Map.Entry<Character,Node>entry:curr.nextLetter.entrySet())
+            {
+                if(FindLetter(entry.getValue(),letters,count+1))
+                    return true;
+            }
+            return false;
+        }
+        
+        if(!curr.nextLetter.containsKey(letters[count]))
+            return false;
+        return FindLetter(curr.nextLetter.get(letters[count]),letters,count+1);
+        
+    }
+}
+
+/**
+ * Your WordDictionary object will be instantiated and called as such:
+ * WordDictionary obj = new WordDictionary();
+ * obj.addWord(word);
+ * boolean param_2 = obj.search(word);
+ */
