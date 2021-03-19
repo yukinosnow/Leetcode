@@ -1,0 +1,89 @@
+class Trie {
+    class Node{
+        public char letter;
+        public Map<Character,Node> nextLetter;
+        public boolean end;
+        public Node(char letter)
+        {
+            this.letter=letter;
+            nextLetter=new HashMap<>();
+            end=false;
+        }
+    }
+    Map<Character,Node>ref;
+    /** Initialize your data structure here. */
+    public Trie() {
+        ref=new HashMap<>();
+    }
+    
+    /** Inserts a word into the trie. */
+    public void insert(String word) {
+        char[]letters=word.toCharArray();
+        if(letters.length==0)
+            return;
+        if(!ref.containsKey(letters[0]))
+            ref.put(letters[0],new Node(letters[0]));
+        Node curr=ref.get(letters[0]);
+        if(letters.length==1)
+        {
+            curr.end=true;
+            return;
+        }
+        for(int i=1;i<letters.length;i++)
+        {
+            if(!curr.nextLetter.containsKey(letters[i]))
+                curr.nextLetter.put(letters[i],new Node(letters[i]));
+            curr=curr.nextLetter.get(letters[i]);
+            if(i==letters.length-1)
+                curr.end=true;
+        }
+    }
+    
+    /** Returns if the word is in the trie. */
+    public boolean search(String word) {
+        char[]letters=word.toCharArray();
+        if(letters.length==0)
+            return true;
+        if(!ref.containsKey(letters[0]))
+            return false;
+        Node curr=ref.get(letters[0]);
+        int count=1;
+        while(count<letters.length)
+        {
+            if(!curr.nextLetter.containsKey(letters[count]))
+                return false;
+            curr=curr.nextLetter.get(letters[count]);
+            count++;
+        }
+        if(!curr.end)
+            return false;
+        return true;
+    }
+    
+    /** Returns if there is any word in the trie that starts with the given prefix. */
+    public boolean startsWith(String prefix) {
+        char[]letters=prefix.toCharArray();
+        if(letters.length==0)
+            return true;
+        if(!ref.containsKey(letters[0]))
+            return false;
+        Node curr=ref.get(letters[0]);
+        int count=1;
+        while(count<letters.length)
+        {
+            if(!curr.nextLetter.containsKey(letters[count]))
+                return false;
+            curr=curr.nextLetter.get(letters[count]);
+            count++;
+        }
+        return true;
+    }
+}
+
+/**
+ * Your Trie object will be instantiated and called as such:
+ * Trie obj = new Trie();
+ * obj.insert(word);
+ * boolean param_2 = obj.search(word);
+ * boolean param_3 = obj.startsWith(prefix);
+ */
