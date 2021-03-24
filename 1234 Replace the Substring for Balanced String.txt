@@ -1,0 +1,45 @@
+class Solution {
+    public int balancedString(String s) {
+        int left=0;
+        int right=s.length()-1;
+        char[]word=s.toCharArray();
+        int result=Integer.MAX_VALUE;
+        int[]leftPart=new int[26];
+        int[]rightPart=new int[26];
+        int limit=word.length/4;
+        while(left<=right)
+        {
+            leftPart[(int)(word[left]-'A')]++;
+            if(leftPart[(int)(word[left]-'A')]>limit)
+                break;
+            left++;
+        }
+        if(left==s.length())
+            return 0;
+        while(right>=0)
+        {
+            rightPart[(int)(word[right]-'A')]++;
+            if(rightPart[(int)(word[right]-'A')]>limit)
+                break;
+            right--;
+        }
+        rightPart[(int)(word[right]-'A')]--;
+        right++;
+        result=Math.min(s.length()-left,right);
+        for(int i=0;i<left;i++)
+        {
+            char letter=word[i];
+            rightPart[(int)(letter-'A')]++;
+            while(right<s.length()&&rightPart[(int)(letter-'A')]>limit)
+            {
+                char temp=word[right];
+                rightPart[(int)(temp-'A')]--;
+                right++;
+            }
+            if(right>=s.length())
+                break;
+            result=Math.min(result,right-i-1);
+        }
+        return result;
+    }
+}
