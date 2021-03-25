@@ -1,0 +1,43 @@
+class Solution {
+    public int maxSum(int[] nums1, int[] nums2) {
+        int module=1000000007;
+        int prev1=0;
+        int prev2=0;
+        int curr1=0;
+        int curr2=0;
+        long result=0;
+        long[]sum1=new long[nums1.length+1];
+        long[]sum2=new long[nums2.length+1];
+        for(int i=0;i<nums1.length;i++)
+        {
+            sum1[i+1]=sum1[i]+nums1[i];
+        }
+        for(int i=0;i<nums2.length;i++)
+        {
+            sum2[i+1]=sum2[i]+nums2[i];
+        }
+        while(curr1<nums1.length&&curr2<nums2.length)
+        {
+            if(nums1[curr1]==nums2[curr2])
+            {
+                if(sum1[curr1+1]-sum1[prev1]>=sum2[curr2+1]-sum2[prev2])
+                    result+=(sum1[curr1+1]-sum1[prev1])%module;
+                else
+                    result+=(sum2[curr2+1]-sum2[prev2])%module;
+                curr1++;
+                curr2++;
+                prev1=curr1;
+                prev2=curr2;
+            }
+            else if(nums1[curr1]<nums2[curr2])
+                curr1++;
+            else
+                curr2++;
+        }
+        if(sum1[sum1.length-1]-sum1[prev1]>=sum2[sum2.length-1]-sum2[prev2])
+            result+=(sum1[sum1.length-1]-sum1[prev1])%module;
+        else
+            result+=(sum2[sum2.length-1]-sum2[prev2])%module;
+        return (int)(result%module);
+    }
+}
