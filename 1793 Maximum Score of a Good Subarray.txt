@@ -1,0 +1,42 @@
+class Solution {
+    public int maximumScore(int[] nums, int k) {
+        int result=nums[k];
+        int min=nums[k];
+        int left=k;
+        int right=k;
+        while(left>=0&&right<nums.length)
+        {
+            if(left-1>=0&&right+1<nums.length)
+            {
+                if(nums[left-1]>=nums[right+1])
+                {
+                    min=Math.min(min,nums[--left]);
+                    result=Math.max(result,(right-left+1)*min);
+                }
+                else
+                {
+                    min=Math.min(min,nums[++right]);
+                    result=Math.max(result,(right-left+1)*min);
+                }
+            }
+            else if(left-1<0&&right+1>=nums.length)
+                break;
+            else
+            {
+                if(left-1<0)
+                {
+                    min=Math.min(min,nums[++right]);
+                    result=Math.max(result,(right-left+1)*min);
+                    
+                }
+                else
+                {
+                    min=Math.min(min,nums[--left]);
+                    result=Math.max(result,(right-left+1)*min);
+                    
+                }
+            }
+        }
+        return result;
+    }
+}
