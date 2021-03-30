@@ -1,0 +1,51 @@
+class Solution {
+    private int result=Integer.MAX_VALUE;
+    public int splitArray(int[] nums, int m) {
+        int right=0;
+        int left=Integer.MAX_VALUE;
+        int bucketNum=0;
+        if(nums.length==0)
+            return 0;
+        for(int i=0;i<nums.length;i++)
+        {
+            right+=nums[i];
+            left=Math.min(left,nums[i]);
+        }
+        result=right;
+        int mid=left+(right-left)/2;
+        while(left+1<right)
+        {
+            mid=left+(right-left)/2;
+            bucketNum=Helper(nums,mid,m);
+            if(bucketNum>m)
+                left=mid;
+            else
+                right=mid;
+        }
+        Helper(nums,left,m);
+        Helper(nums,right,m);
+        return result;
+    }
+    public int Helper(int[] nums, int mid,int m)
+    {
+        int bucketNum=0;
+        int bucket=nums[0];
+        int maxSet=0;
+        for(int i=1;i<nums.length;i++)
+        {
+            if(bucket+nums[i]<=mid)
+                bucket+=nums[i];
+            else
+            {
+                maxSet=Math.max(maxSet,bucket);
+                bucket=nums[i];
+                bucketNum++;
+            }
+        }
+        bucketNum++;
+        maxSet=Math.max(maxSet,bucket);
+        if(bucketNum<=m)
+            result=Math.min(result,maxSet);
+        return bucketNum;
+    }
+}
