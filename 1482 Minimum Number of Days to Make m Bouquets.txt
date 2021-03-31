@@ -1,0 +1,60 @@
+class Solution {
+    public int minDays(int[] bloomDay, int m, int k) {
+        if(m*k>bloomDay.length)
+            return -1;
+        long left=Long.MAX_VALUE;
+        long right=0;
+        for(int i=0;i<bloomDay.length;i++)
+        {
+            left=Math.min(left,(long)bloomDay[i]);
+            right+=bloomDay[i];
+        }
+        long mid=left+(right-left)/2;
+        int bloom=0;
+        long result=Long.MAX_VALUE;
+        while(left+1<right)
+        {
+            mid=left+(right-left)/2;
+            bloom=NumberOfBloom(bloomDay,mid,k);
+            if(bloom<m)
+                left=mid;
+            else
+            {
+                result=Math.min(mid,result);
+                right=mid;
+            }
+        }
+        bloom=NumberOfBloom(bloomDay,left,k);
+        if(bloom>=m)
+            result=Math.min(left,result);
+        bloom=NumberOfBloom(bloomDay,right,k);
+        if(bloom>=m)
+            result=Math.min(right,result);
+        if(result==Long.MAX_VALUE)
+            return -1;
+        return (int)result;
+        
+    }
+    public int NumberOfBloom(int[] bloomDay, long day, int k)
+    {
+        int count=0;
+        int numberOfBloom=0;
+        for(int i=0;i<bloomDay.length;i++)
+        {
+            if(bloomDay[i]<=day)
+            {
+                count++;
+                if(count==k)
+                {
+                    count=0;
+                    numberOfBloom++;
+                }
+            }
+            else
+            {
+                count=0;
+            }
+        }
+        return numberOfBloom;
+    }
+}
