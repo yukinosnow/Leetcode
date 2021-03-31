@@ -1,0 +1,39 @@
+class Solution {
+    public int minEatingSpeed(int[] piles, int h) {
+        long left=1;
+        long right=0;
+        for(int i=0;i<piles.length;i++)
+            right+=piles[i];
+        long mid=left+(right-left)/2;
+        long eatSpeed=right;
+        int hour=0;
+        while(left+1<right)
+        {
+            mid=left+(right-left)/2;
+            hour=FindHour(piles,mid);
+            if(hour>h)
+                left=mid;
+            else
+            {
+                right=mid;
+                eatSpeed=Math.min(eatSpeed,mid);
+            } 
+        }
+        hour=FindHour(piles,left);
+        if(hour<=h)
+            eatSpeed=Math.min(eatSpeed,left);
+        hour=FindHour(piles,right);
+        if(hour<=h)
+            eatSpeed=Math.min(eatSpeed,right);
+        return (int)eatSpeed;
+    }
+    public int FindHour(int[] piles, long eatSpeed)
+    {
+        int result=0;
+        for(int i=0;i<piles.length;i++)
+        {
+            result+=(int)Math.ceil((double)piles[i]/eatSpeed);
+        }
+        return result;
+    }
+}
