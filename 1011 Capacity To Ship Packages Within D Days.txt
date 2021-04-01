@@ -1,0 +1,47 @@
+class Solution {
+    public int shipWithinDays(int[] weights, int D) {
+        int left=1;
+        int right=Integer.MAX_VALUE;
+        for(int i=0;i<weights.length;i++)
+            left=Math.max(weights[i],left);
+        int mid=left+(right-left)/2;
+        int days=0;
+        int result=Integer.MAX_VALUE;
+        while(left+1<right)
+        {
+            mid=left+(right-left)/2;
+            days=helper(weights,mid);
+            if(days>D)
+                left=mid;
+            else
+            {
+                result=Math.min(result,mid);
+                right=mid;
+            }
+        }
+        days=helper(weights,left);
+        if(days<=D)
+            result=Math.min(result,left);
+        days=helper(weights,right);
+        if(days<=D)
+            result=Math.min(result,right);
+        return result;
+    }
+    public int helper(int[] weights, int capacity)
+    {
+        int day=0;
+        int currWeight=0;
+        for(int i=0;i<weights.length;i++)
+        {
+            if(currWeight+weights[i]<=capacity)
+                currWeight+=weights[i];
+            else
+            {
+                day++;
+                currWeight=weights[i];
+            }
+        }
+        day++;
+        return day;
+    }
+}
