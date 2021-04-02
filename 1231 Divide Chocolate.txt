@@ -1,0 +1,56 @@
+class Solution {
+    public int maximizeSweetness(int[] sweetness, int K) {
+        int left=1;
+        int right=Integer.MAX_VALUE;
+        int mid=left+(right-left)/2;
+        int result=0;
+        int cut=0;
+        int[]minsweet=new int[1];
+        while(left+1<right)
+        {
+            mid=left+(right-left)/2;
+            if(isPossible(sweetness, mid, K+1))
+            {
+                left=mid;
+                result=Math.max(result,minsweet[0]);
+            } 
+            else
+                right=mid;
+        }
+        if(isPossible(sweetness, left, K+1))
+            result=Math.max(result,left);
+        if(isPossible(sweetness, right, K+1))
+            result=Math.max(result,right);
+        return result;
+    }
+    boolean isPossible(int[] arr, int value, int k)
+    {        
+        boolean flag = true;
+        int i =0;
+        int sum = 0;
+        while( i < arr.length )
+        {   
+            
+            if( sum < value ){
+                sum += arr[i];
+                i++;
+             }
+            
+            if (sum >= value){
+                sum = 0;
+                k--;
+            }
+            
+            
+            
+            if ( k == 0 ){
+                return true;
+            }
+        }
+        
+        if ( k > 0 )
+            return false;
+        
+        return true;
+    }
+}
