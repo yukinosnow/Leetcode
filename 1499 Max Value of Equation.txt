@@ -1,0 +1,24 @@
+class Solution {
+    public int findMaxValueOfEquation(int[][] points, int k) {
+        Deque<Integer>dq=new LinkedList<>();
+        int left=0;
+        int right=0;
+        int result=Integer.MIN_VALUE;
+        while(right<points.length)
+        {
+            while(points[right][0]-points[left][0]>k)
+            {
+                if(!dq.isEmpty()&&dq.getFirst()==(points[left][1]-points[left][0]))
+                    dq.removeFirst();
+                left++;
+            }
+            if(left!=right)
+                result=Math.max(result,points[right][1]+points[right][0]+dq.getFirst());
+            while(!dq.isEmpty()&&dq.getLast()<points[right][1]-points[right][0])
+                dq.removeLast();
+            dq.addLast(points[right][1]-points[right][0]);
+            right++;
+        }
+        return result;
+    }
+}
