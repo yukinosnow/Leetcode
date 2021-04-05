@@ -1,0 +1,33 @@
+class Solution {
+    public int findKthLargest(int[] nums, int k) {
+        return helper(nums,k,0,nums.length-1);
+    }
+    public int helper(int[]nums, int k, int left, int right)
+    {
+        int pivot=nums[right];
+        int start=left;
+        int end=right;
+        while(start<end)
+        {
+            while(start<end&&nums[start]<pivot)
+                start++;
+            while(start<end&&nums[end]>=pivot)
+                end--;
+            if(start<end)
+                Swap(nums,start,end);
+        }
+        Swap(nums,start,right);
+        if(nums.length-start==k)
+            return nums[start];
+        if(nums.length-start>k)
+            return helper(nums,k,start+1,right);
+        else
+            return helper(nums,k,left,start-1);
+    }
+    public void Swap(int[]nums, int a, int b)
+    {
+        int temp=nums[a];
+        nums[a]=nums[b];
+        nums[b]=temp;
+    }
+}
