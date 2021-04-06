@@ -1,0 +1,67 @@
+class Solution {
+    int count=0;
+    boolean check=true;
+    public boolean isValidSerialization(String preorder) {
+        String[]split=preorder.split(",");
+        BuildTree(split);
+        return count>=split.length&&check;
+    }
+    public void BuildTree(String[]input)
+    {
+        if(count>=input.length)
+        {
+            check=false;
+            return;
+        }
+        if(input[count].equals("#"))
+        {
+            count++;
+            return;
+        }
+        else
+        {
+            count++;
+            BuildTree(input);
+            BuildTree(input);
+        }
+    }
+}
+
+class Solution {
+    class Node{
+        public String val;
+        public int count;
+        public Node(String val)
+        {
+            this.val=val;
+            count=0;
+        }
+    }
+    public boolean isValidSerialization(String preorder) {
+        String[]split=preorder.split(",");
+        if(split.length==1&&split[0].equals("#"))
+            return true;
+        Stack<Node>stack=new Stack<>();
+        for(int i=0;i<split.length;i++)
+        {
+            if(split[i].equals("#"))
+            {
+                if(stack.isEmpty())
+                    return false;
+                stack.peek().count++;
+                while(!stack.isEmpty()&&stack.peek().count==2)
+                {
+                    stack.pop();
+                    if(stack.isEmpty()&&i!=split.length-1)
+                        return false;
+                    if(!stack.isEmpty())
+                        stack.peek().count++;
+                }
+            }
+            else
+                stack.add(new Node(split[i]));
+        }
+        return stack.isEmpty();
+    }
+   
+}
