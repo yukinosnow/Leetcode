@@ -1,0 +1,55 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+    int value=0;
+    int counter=0;
+    int position=0;
+    public TreeNode recoverFromPreorder(String S) {
+        char[]letter=S.toCharArray();
+        FindNextNode(letter);
+        return helper(letter,0);
+    }
+    public TreeNode helper(char[]letter,int level)
+    {
+        int currentLevel=level;
+        TreeNode node=new TreeNode(value);
+        FindNextNode(letter);
+        if(counter<=currentLevel||value==0)
+            return node;
+        node.left=helper(letter,level+1);
+        if(counter<=currentLevel||value==0)
+            return node;
+        node.right=helper(letter,level+1);
+        return node;
+        
+    }
+    public void FindNextNode(char[]letter)
+    {
+        counter=0;
+        while(position<letter.length&&letter[position]=='-')
+        {
+            counter++;
+            position++;
+        }
+        value=0;
+        while(position<letter.length&&letter[position]!='-')
+        {
+            value=value*10+(int)(letter[position]-'0');
+            position++;
+        }
+           
+    }
+}
