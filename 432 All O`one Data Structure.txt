@@ -1,0 +1,75 @@
+class AllOne {
+    Map<String,Integer>wordInfo;
+    TreeMap<Integer,Set<String>>countInfo;
+    /** Initialize your data structure here. */
+    public AllOne() {
+        wordInfo=new HashMap<>();
+        countInfo=new TreeMap<>();
+    }
+    
+    /** Inserts a new key <Key> with value 1. Or increments an existing key by 1. */
+    public void inc(String key) {
+        int count=wordInfo.getOrDefault(key,0);
+        wordInfo.put(key,count+1);
+        if(count!=0)
+        {
+            Set<String>wordCollection=countInfo.get(count);
+            if(wordCollection.size()==1)
+                countInfo.remove(count);
+            else
+            {
+                wordCollection.remove(key);
+                countInfo.put(count,wordCollection);
+            }
+                
+        }
+        Set<String>wordCollection=countInfo.getOrDefault(count+1,new HashSet<String>());
+        wordCollection.add(key);
+        countInfo.put(count+1,wordCollection);
+
+    }
+    
+    /** Decrements an existing key by 1. If Key's value is 1, remove it from the data structure. */
+    public void dec(String key) {
+        if(!wordInfo.containsKey(key))
+            return;
+        int count=wordInfo.get(key);
+        if(count==1)
+            wordInfo.remove(key);
+        else
+            wordInfo.put(key,count-1);
+        countInfo.get(count).remove(key);
+        if(countInfo.get(count).size()==0)
+            countInfo.remove(count);
+        if(count==1)
+            return;
+        Set<String>wordCollection=countInfo.getOrDefault(count-1,new HashSet<String>());
+        wordCollection.add(key);
+        countInfo.put(count-1,wordCollection);
+            
+    }
+    
+    /** Returns one of the keys with maximal value. */
+    public String getMaxKey() {
+        if(countInfo.isEmpty())
+            return "";
+        return countInfo.lastEntry().getValue().iterator().next();
+        
+    }
+    
+    /** Returns one of the keys with Minimal value. */
+    public String getMinKey() {
+        if(countInfo.isEmpty())
+            return "";
+        return countInfo.firstEntry().getValue().iterator().next();
+    }
+}
+
+/**
+ * Your AllOne object will be instantiated and called as such:
+ * AllOne obj = new AllOne();
+ * obj.inc(key);
+ * obj.dec(key);
+ * String param_3 = obj.getMaxKey();
+ * String param_4 = obj.getMinKey();
+ */
