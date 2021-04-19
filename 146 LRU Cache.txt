@@ -1,0 +1,85 @@
+class LRUCache {
+    class Node{
+        public int key;
+        public int value;
+        public Node next;
+        public Node prev;
+        public Node(int key, int value)
+        {
+            this.key=key;
+            this.value=value;
+        }
+    }
+    Node head;
+    Node tail;
+    Map<Integer,Node>ref;
+    int capacity;
+    int count;
+    public LRUCache(int capacity) {
+        head=new Node(-1,-1);
+        tail=new Node(-1,-1);
+        head.next=tail;
+        tail.prev=head;
+        ref=new HashMap<>();
+        this.capacity=capacity;
+        count=0;
+    }
+    
+    public int get(int key) {
+        if(!ref.containsKey(key))
+        {
+            return -1;
+        }
+        Node currNode=ref.get(key);
+        ExtractNode(currNode);
+        BringNodeToFront(currNode);
+        return currNode.value;
+    }
+    
+    public void put(int key, int value) {
+        if(ref.containsKey(key))
+        {
+            Node currNode=ref.get(key);
+            currNode.value=value;
+            ExtractNode(currNode);
+            BringNodeToFront(currNode);
+        }
+        else
+        {
+            if(count<capacity)
+            {
+                count++;
+            }
+            else
+            {
+                ref.remove(tail.prev.key);
+                ExtractNode(tail.prev);
+            }
+            Node newNode=new Node(key,value);
+            ref.put(key,newNode);
+            BringNodeToFront(newNode);
+        }
+    }
+    public void ExtractNode(Node currNode)
+    {
+        Node prev=currNode.prev;
+        Node next=currNode.next;
+        prev.next=next;
+        next.prev=prev;
+    }
+    public void BringNodeToFront(Node currNode)
+    {
+        Node headNext=head.next;
+        head.next=currNode;
+        currNode.next=headNext;
+        currNode.prev=head;
+        headNext.prev=currNode;
+    }
+}
+
+/**
+ * Your LRUCache object will be instantiated and called as such:
+ * LRUCache obj = new LRUCache(capacity);
+ * int param_1 = obj.get(key);
+ * obj.put(key,value);
+ */
