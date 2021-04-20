@@ -1,0 +1,94 @@
+class NumArray {
+    class Node
+    {
+        public int sum;
+        public int leftRange;
+        public int rightRange;
+        public Node left;
+        public Node right;
+        public Node(int sum, int leftRange, int rightRange)
+        {
+            this.sum=sum;
+            this.leftRange=leftRange;
+            this.rightRange=rightRange;
+        }
+        
+    }
+    int[]num;
+    int[]prefixSum;
+    Node head;
+    public NumArray(int[] nums) {
+        num=new int[nums.length];
+        prefixSum=new int[nums.length+1];
+        System.arraycopy(nums,0,num,0,nums.length);
+        for(int i=0;i<nums.length;i++)
+        {
+            prefixSum[i+1]=nums[i]+prefixSum[i];
+        }
+        int mid=0+(nums.length-1)/2;
+        head=new Node(prefixSum[prefixSum.length-1],0,nums.length-1);
+        head.left=helper(0,mid,prefixSum);
+        head.right=helper(mid+1,nums.length-1,prefixSum);
+    }
+    public Node helper(int left, int right,int[]prefixSum)
+    {
+        if(left>right)
+            return null;
+        if(left==right)
+        {
+            Node node=new Node(prefixSum[right+1]-prefixSum[left],left,right);
+            return node;
+        }
+        int mid=left+(right-left)/2;
+        Node node=new Node(prefixSum[right+1]-prefixSum[left],left,right);
+        node.left=helper(left,mid,prefixSum);
+        node.right=helper(mid+1,right,prefixSum);
+        return node;
+        
+    }
+    public void update(int index, int val) {
+        int updateValue=-num[index]+val;
+        num[index]=val;
+        UpdateTree(head,index,updateValue);
+    }
+    public void UpdateTree(Node node, int index, int val)
+    {
+        if(node==null)
+            return;
+        if(node.leftRange<=index&&node.rightRange>=index)
+        {
+            node.sum+=val;
+            UpdateTree(node.left,index,val);
+            UpdateTree(node.right,index,val);
+        }
+    }
+    
+    public int sumRange(int left, int right) {
+        return SumFromTree(head,left,right);
+    }
+    public int SumFromTree(Node node, int left, int right)
+    {
+        if(node==null||left>right)
+            return 0;
+        if(left==node.leftRange&&node.rightRange==right)
+            return node.sum;
+        int returnValue=0;
+        int mid=node.leftRange+(node.rightRange-node.leftRange)/2;
+        if(mid<left)
+            returnValue=SumFromTree(node.right,left,right);
+        else if(mid>right)
+            returnValue=SumFromTree(node.left,left,right);
+        else
+            returnValue=SumFromTree(node.left,left,mid)+SumFromTree(node.right,mid+1,right);
+        return returnValue;
+        
+        
+    }
+}
+
+/**
+ * Your NumArray object will be instantiated and called as such:
+ * NumArray obj = new NumArray(nums);
+ * obj.update(index,val);
+ * int param_2 = obj.sumRange(left,right);
+ */
