@@ -1,0 +1,92 @@
+class Solution {
+    class Node
+    {
+        int leftRange;
+        int rightRange;
+        int val;
+        Node left;
+        Node right;
+        public Node(int val, int leftRange, int rightRange)
+        {
+            this.val=val;
+            this.leftRange=leftRange;
+            this.rightRange=rightRange;
+        }
+    }
+    Node head;
+    public List<Integer> countSmaller(int[] nums) {
+        Map<Integer,Integer>ref=new HashMap<>();
+        BuildIndex(ref,nums);
+        int maxRight=ref.size()-1;
+        int mid=(maxRight)/2;
+        Node head=new Node(0,0,maxRight);
+        head.left=BuildTree(0,mid);
+        head.right=BuildTree(mid+1,maxRight);
+        List<Integer>result=new ArrayList<>();
+        for(int i=nums.length-1;i>=0;i--)
+        {
+            int position=ref.get(nums[i]);
+            result.add(0,QuerySmallFreq(head,0,position-1));
+            UpdateTree(position,head);
+        }
+        return result;
+        
+    }
+    public void BuildIndex(Map<Integer,Integer>ref, int[]nums)
+    {
+        Set<Integer>set=new HashSet<>();
+        for(int i=0;i<nums.length;i++)
+            set.add(nums[i]);
+        int[]input=new int[set.size()];
+        int count=0;
+        for(Integer num:set)
+        {
+            input[count]=num;
+            count++;
+        }
+        Arrays.sort(input);
+        for(int i=0;i<input.length;i++)
+            ref.put(input[i],i);
+    }
+    public Node BuildTree(int leftRange, int rightRange)
+    {
+        if(leftRange>rightRange)
+            return null;
+        if(leftRange==rightRange)
+        {
+            Node node=new Node(0,leftRange,rightRange);
+            return node;
+        }
+        Node node=new Node(0,leftRange,rightRange);
+        int mid=leftRange+(rightRange-leftRange)/2;
+        node.left=BuildTree(leftRange,mid);
+        node.right=BuildTree(mid+1,rightRange);
+        return node;
+    }
+    public void UpdateTree(int position, Node node)
+    {
+        if(node==null)
+            return;
+        if(node.leftRange>position||node.rightRange<position)
+            return;
+        node.val++;
+        UpdateTree(position,node.left);
+        UpdateTree(position,node.right);
+    }
+    public int QuerySmallFreq(Node node, int leftRange, int rightRange)
+    {
+        if(node==null)
+            return 0;
+        if(leftRange>rightRange)
+            return 0;
+        if(node.leftRange==leftRange&&node.rightRange==rightRange)
+            return node.val;
+        int mid=node.leftRange+(node.rightRange-node.leftRange)/2;
+        if(rightRange<mid)
+            return QuerySmallFreq(node.left,leftRange,rightRange);
+        else if(leftRange>mid)
+            return QuerySmallFreq(node.right,leftRange,rightRange);
+        else
+            return QuerySmallFreq(node.left,leftRange,mid)+QuerySmallFreq(node.right,mid+1,rightRange);
+    }
+}
