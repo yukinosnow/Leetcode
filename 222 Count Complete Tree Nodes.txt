@@ -1,0 +1,59 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+    public int countNodes(TreeNode root) {
+        TreeNode node=root;
+        int level=0;
+        while(node!=null)
+        {
+            level++;
+            node=node.right;
+        }
+        int left=0;
+        int right=(int)Math.pow(2,level)-1;
+        int leftRange=0;
+        int rightRange=right;
+        int mid=left+(right-left)/2;
+        while(left+1<right)
+        {
+            mid=left+(right-left)/2;
+            if(CheckNodeExist(root,leftRange,rightRange,mid))
+                left=mid;
+            else
+                right=mid;
+        }
+        if(CheckNodeExist(root,leftRange,rightRange,right))
+            return (int)Math.pow(2,level)+right;
+        if(CheckNodeExist(root,leftRange,rightRange,left))
+            return (int)Math.pow(2,level)+left;
+        return (int)Math.pow(2,level)-1;
+    }
+    public boolean CheckNodeExist(TreeNode node, int left, int right, int position)
+    {
+        if(left>=right)
+        {
+            if(node==null)
+                return false;
+            return true;
+        }
+        int mid=left+(right-left)/2;
+        if(position>mid)
+            return CheckNodeExist(node.right,mid+1,right,position);
+        else
+            return CheckNodeExist(node.left,left,mid,position);
+    }
+    
+}
