@@ -1,0 +1,33 @@
+class Solution {
+    int result=0;
+    public int pathSum(int[] nums) {
+        if(nums.length==0)
+            return 0;
+        int[][]map=new int[5][16];
+        for(int i=0;i<map.length;i++)
+            Arrays.fill(map[i],-1);
+        int lastRow=0;
+        for(int i=0;i<nums.length;i++)
+        {
+            int level=nums[i]/100-1;
+            int order=(nums[i]%100)/10-1;
+            lastRow=Math.max(lastRow,level);
+            map[level][order]=nums[i]%10;
+        }
+        DFS(map,0,0,0);
+        return result;
+    }
+    public void DFS(int[][]map, int y, int x,int sum)
+    {
+        int temp=sum;
+        if(map[y][x]==-1)
+            return;
+        if(map[y+1][2*x]==-1&&map[y+1][2*x+1]==-1)
+        {
+            result+=sum+map[y][x];
+            return;
+        }
+        DFS(map,y+1,2*x,sum+map[y][x]);
+        DFS(map,y+1,2*x+1,sum+map[y][x]);
+    }
+}
