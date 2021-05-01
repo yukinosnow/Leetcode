@@ -1,0 +1,69 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    class Node
+    {
+        int val;
+        Node left;
+        Node right;
+        Node parent;
+        int position=Integer.MAX_VALUE;
+        Node(int val)
+        {
+            this.val=val;
+        }
+    }
+    Node targetNode=null;
+    public List<Integer> distanceK(TreeNode root, TreeNode target, int K) {
+        List<Integer>result=new ArrayList<>();
+        DFS(root,null,target);
+        if(targetNode==null)
+            return result;
+        Queue<Node>nextRound=new LinkedList<>();
+        Queue<Node>processing=new LinkedList<>();
+        nextRound.add(targetNode);
+        int dis=0;
+        while(!nextRound.isEmpty())
+        {
+            while(!nextRound.isEmpty())
+            {
+                if(dis==K)
+                    result.add(nextRound.remove().val);
+                else
+                    processing.add(nextRound.remove());
+            }
+            while(!processing.isEmpty())
+            {
+                Node temp=processing.remove();
+                temp.position=dis;
+                if(temp.left!=null&&temp.left.position>dis)
+                    nextRound.add(temp.left);
+                if(temp.right!=null&&temp.right.position>dis)
+                    nextRound.add(temp.right);
+                if(temp.parent!=null&&temp.parent.position>dis)
+                    nextRound.add(temp.parent);
+            }
+            dis++;
+        }
+        return result;
+    }
+    public Node DFS(TreeNode node, Node parent, TreeNode target)
+    {
+        if(node==null)
+            return null;
+        Node newNode=new Node(node.val);
+        if(node.val==target.val)
+            targetNode=newNode;
+        newNode.parent=parent;
+        newNode.left=DFS(node.left,newNode,target);
+        newNode.right=DFS(node.right,newNode,target);
+        return newNode;
+    }
+}
