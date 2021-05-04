@@ -1,0 +1,24 @@
+class Solution {
+    public int jump(int[] nums) {
+        int[]ref=new int[nums.length];
+        Arrays.fill(ref,Integer.MAX_VALUE/2);
+        ref[0]=0;
+        int currentStep=nums[0];
+        int currentMax=currentStep;
+        int step=1;
+        for(int i=1;i<nums.length;i++)
+        {
+            ref[i]=step;
+            currentStep--;
+            currentMax--;
+            currentMax=Math.max(currentMax,nums[i]);
+            if(currentStep==0)
+            {
+                currentStep=currentMax;
+                step++;
+            }
+            
+        }
+        return ref[nums.length-1];
+    }
+}
