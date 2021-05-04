@@ -1,0 +1,15 @@
+class Solution {
+    public boolean canJump(int[] nums) {
+        int position=0;
+        int step=0;
+        while(position<nums.length-1&&step>=0)
+        {
+            step=Math.max(step,nums[position]);
+            step--;
+            if(step==-1)
+                break;
+            position++;
+        }
+        return position==nums.length-1&&step!=-1;
+    }
+}
