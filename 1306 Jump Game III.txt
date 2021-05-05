@@ -1,0 +1,23 @@
+class Solution {
+    public boolean canReach(int[] arr, int start) {
+        int[]ref=new int[arr.length];
+        DFS(arr,ref,start);
+        for(int i=0;i<arr.length;i++)
+        {
+            if(arr[i]==0&&ref[i]==1)
+                return true;
+        }
+        return false;
+    }
+    public void DFS(int[]arr, int[]ref, int position)
+    {
+        if(position<0||position>=arr.length)
+            return;
+        if(ref[position]==1)
+            return;
+        ref[position]=1;
+        int step=arr[position];
+        DFS(arr,ref,position+step);
+        DFS(arr,ref,position-step);
+    }
+}
