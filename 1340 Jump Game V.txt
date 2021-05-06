@@ -1,0 +1,44 @@
+class Solution {
+    /*class Node{
+        int value;
+        int position;
+        int count;
+        public Node(int value, int position)
+        {
+            
+        }
+    }*/
+    public int maxJumps(int[] arr, int d) {
+        int[]ref=new int[arr.length];
+        for(int i=0;i<arr.length;i++)
+            FindMaxJump(arr,i,ref,d,1);
+        int result=0;
+        for(int i=0;i<ref.length;i++)
+            result=Math.max(result,ref[i]);
+        return result;
+    }
+    public void FindMaxJump(int[]arr, int position, int[]ref, int d,int count)
+    {
+        if(ref[position]>=count)
+            return;
+        ref[position]=count;
+        int prev=arr[position];
+        for(int i=position;i<=position+d&&i<arr.length;i++)
+        {
+            if(arr[i]>prev)
+            {
+                prev=arr[i];
+                FindMaxJump(arr,i,ref,d,ref[position]+1);
+            }
+        }
+        prev=arr[position];
+        for(int i=position;i>=position-d&&i>=0;i--)
+        {
+            if(arr[i]>prev)
+            {
+                prev=arr[i];
+                FindMaxJump(arr,i,ref,d,ref[position]+1);
+            }
+        }
+    }
+}
