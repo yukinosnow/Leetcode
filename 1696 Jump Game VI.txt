@@ -1,0 +1,31 @@
+class Solution {
+    public int maxResult(int[] nums, int k) {
+        int[] ref=new int[nums.length];
+        Deque<Integer>dq=new LinkedList<>();
+        ref[0]=nums[0];
+        dq.addLast(ref[0]);
+        int left=0;
+        int right=1;
+        while(right<=k&&right<nums.length)
+        {
+            ref[right]=dq.getFirst()+nums[right];
+            while(!dq.isEmpty()&&dq.getLast()<ref[right])
+                dq.removeLast();
+            dq.addLast(ref[right]);
+            right++;
+        }
+        while(right<nums.length)
+        {
+            if(dq.getFirst()==ref[left])
+                dq.removeFirst();
+            left++;
+            ref[right]=dq.getFirst()+nums[right];
+            while(!dq.isEmpty()&&dq.getLast()<ref[right])
+                dq.removeLast();
+            dq.addLast(ref[right]);
+            right++;
+        }
+        return ref[right-1];
+    }
+    
+}
