@@ -1,0 +1,139 @@
+/*
+// Definition for an Interval.
+class Interval {
+    public int start;
+    public int end;
+
+    public Interval() {}
+
+    public Interval(int _start, int _end) {
+        start = _start;
+        end = _end;
+    }
+};
+*/
+
+class Solution {
+    public List<Interval> employeeFreeTime(List<List<Interval>> schedule) {
+        List<Interval>combineSchedule=Divide(schedule);
+        List<Interval>result=new ArrayList<>();
+        for(int i=0;i<combineSchedule.size()-1;i++)
+        {
+            Interval prev=combineSchedule.get(i);
+            Interval next=combineSchedule.get(i+1);
+            if(prev.end!=next.start)
+            {
+                Interval breakTime=new Interval(prev.end,next.start);
+                result.add(breakTime);
+            }
+        }
+        return result;
+    }
+    public List<Interval>Divide(List<List<Interval>>schedule)
+    {
+        if(schedule.size()==0)
+            return new ArrayList<Interval>();
+        if(schedule.size()==1)
+            return new ArrayList<Interval>(schedule.get(0));
+        int mid=schedule.size()/2;
+        List<List<Interval>>scheduleA=new ArrayList<>();
+        List<List<Interval>>scheduleB=new ArrayList<>();
+        for(int i=0;i<mid;i++)
+            scheduleA.add(new ArrayList<Interval>(schedule.get(i)));
+        for(int i=mid;i<schedule.size();i++)
+            scheduleB.add(new ArrayList<Interval>(schedule.get(i)));
+        List<Interval>schedule1=Divide(scheduleA);
+        List<Interval>schedule2=Divide(scheduleB);
+        return Merge(schedule1,schedule2);
+    }
+    public List<Interval>Merge(List<Interval>schedule1, List<Interval>schedule2)
+    {
+        if(schedule1.size()==0)
+            return schedule2;
+        if(schedule2.size()==0)
+            return schedule1;
+        List<Interval>result=new ArrayList<>();
+        int count1=0;
+        int count2=0;
+        Interval interset=new Interval(-1,-1);
+        while(count1<schedule1.size()&&count2<schedule2.size())
+        {
+            Interval int1=schedule1.get(count1);
+            Interval int2=schedule2.get(count2);
+            if(int1.start<=int2.start)
+            {
+                if(interset.start==-1)
+                {
+                    interset.start=int1.start;
+                    interset.end=int1.end; 
+                }
+                else if(interset.end>=int1.start)
+                {
+                    interset.start=Math.min(interset.start,int1.start);
+                    interset.end=Math.max(interset.end,int1.end);
+                }
+                else
+                {
+                    result.add(new Interval(interset.start,interset.end));
+                    interset.start=int1.start;
+                    interset.end=int1.end;
+                }
+                count1++;
+            }
+            else
+            {
+                if(interset.start==-1)
+                {
+                    interset.start=int2.start;
+                    interset.end=int2.end; 
+                }
+                else if(interset.end>=int2.start)
+                {
+                    interset.start=Math.min(interset.start,int2.start);
+                    interset.end=Math.max(interset.end,int2.end);
+                }
+                else
+                {
+                    result.add(new Interval(interset.start,interset.end));
+                    interset.start=int2.start;
+                    interset.end=int2.end;
+                }
+                count2++;
+            }
+        }
+        while(count1<schedule1.size())
+        {
+            Interval int1=schedule1.get(count1); 
+            if(interset.end>=int1.start)
+            {
+                interset.start=Math.min(interset.start,int1.start);
+                interset.end=Math.max(interset.end,int1.end);
+            }
+            else
+            {
+                result.add(new Interval(interset.start,interset.end));
+                interset.start=int1.start;
+                interset.end=int1.end;
+            }
+            count1++;
+        }
+        while(count2<schedule2.size())
+        {
+            Interval int2=schedule2.get(count2);
+            if(interset.end>=int2.start)
+            {
+                interset.start=Math.min(interset.start,int2.start);
+                interset.end=Math.max(interset.end,int2.end);
+            }
+            else
+            {
+                result.add(new Interval(interset.start,interset.end));
+                interset.start=int2.start;
+                interset.end=int2.end;
+            }
+            count2++;
+        }
+        result.add(new Interval(interset.start,interset.end));
+        return result;
+    }
+}
