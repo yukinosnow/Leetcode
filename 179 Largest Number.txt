@@ -1,0 +1,21 @@
+class Solution {
+    public String largestNumber(int[] nums) {
+        List<Integer>list=new ArrayList<>();
+        for(int i=0;i<nums.length;i++)
+            list.add(nums[i]);
+        Collections.sort(list,(Integer a, Integer b)->{
+            String word1=Integer.toString(a);
+            String word2=Integer.toString(b);
+            String order1 = word1 + word2;
+            String order2 = word2 + word1;
+           return order2.compareTo(order1);
+        });
+        if (list.get(0)==0) {
+            return "0";
+        }
+        StringBuilder result=new StringBuilder();
+        for(int i=0;i<list.size();i++)
+            result.append(list.get(i));
+        return result.toString();
+    }
+}
