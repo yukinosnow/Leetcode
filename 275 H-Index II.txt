@@ -1,0 +1,45 @@
+class Solution {
+    public int hIndex(int[] citations) {
+        int left=0;
+        int right=citations[citations.length-1];
+        int mid=left+(right-left)/2;
+        while(left+1<right)
+        {
+            mid=left+(right-left)/2;
+            if(IsHindex(citations,mid))
+                left=mid;
+            else
+                right=mid;
+        }
+        if(IsHindex(citations,right))
+            return right;
+        if(IsHindex(citations,left))
+            return left;
+        return -1;
+    }
+    public boolean IsHindex(int[]citations, int h)
+    {
+        int position=FindPosition(citations,h);
+        int n=citations.length-position;
+        if(citations.length-h>=position)
+            return true;
+        return false;
+    }
+    public int FindPosition(int[]citations, int h)
+    {
+        int left=0;
+        int right=citations.length-1;
+        int mid=left+(right-left)/2;
+        while(left+1<right)
+        {
+            mid=left+(right-left)/2;
+            if(citations[mid]<h)
+                left=mid;
+            else
+                right=mid;
+        }
+        if(citations[left]>=h)
+            return left;
+        return right;
+    }
+}
