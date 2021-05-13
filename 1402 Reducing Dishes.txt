@@ -1,0 +1,37 @@
+class Solution {
+    public int maxSatisfaction(int[] satisfaction) {
+        Arrays.sort(satisfaction);
+        int positiveSum=0;
+        int result=0;
+        int negativeStart=-1;
+        for(int i=satisfaction.length-1;i>=0;i--)
+        {
+            if(satisfaction[i]<0)
+            {
+                negativeStart=i;
+                break;
+            }
+            positiveSum+=satisfaction[i];
+        }
+        if(negativeStart!=-1)
+        {
+            positiveSum+=satisfaction[negativeStart]; 
+            while(negativeStart>0&&positiveSum>=0)
+            {
+                negativeStart--;
+                positiveSum+=satisfaction[negativeStart];    
+            }
+        }
+        if(positiveSum<0||negativeStart<0)
+            negativeStart++;
+        int factor=1;
+        while(negativeStart<satisfaction.length)
+        {
+            result+=satisfaction[negativeStart]*(factor);
+            factor++;
+            negativeStart++;
+        }
+        return result;
+        
+    }
+}
