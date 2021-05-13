@@ -1,0 +1,55 @@
+class Solution {
+    List<String>result=new ArrayList<>();
+    int totalLength=0;
+    public List<String> maxNumOfSubstrings(String s) {
+        Map<Character,List<Integer>>map=new HashMap<>();
+        char[]word=s.toCharArray();
+        for(int i=0;i<word.length;i++)
+        {
+            if(!map.containsKey(word[i]))
+            {
+                List<Integer>coor=Arrays.asList(Integer.MAX_VALUE,Integer.MIN_VALUE);
+                map.put(word[i],coor);
+            }
+            List<Integer>coor=map.get(word[i]);
+            coor.set(0,Math.min(coor.get(0),i));
+            coor.set(1,Math.max(coor.get(1),i));
+        }
+        List<List<Integer>>list=new ArrayList<>();
+        int prevEnd=-1;
+        for(int i=0;i<s.length();i++){
+            
+            int start=map.get(s.charAt(i)).get(0);
+            //if i is the left most index of this character only then we can start a substring here
+            if(start==i){
+                int newEnd= getRightMost(s,map,i);
+                if(newEnd!= -1){
+                    //if a new substring is found
+                    if(newEnd>prevEnd){
+                        result.add("");
+                    }
+                    prevEnd=newEnd;
+                    // if new end is less than the prev End which means inside prev substring we found a more shorter substring
+                    result.set(result.size()-1,s.substring(i,prevEnd+1));     
+                }
+            }
+            
+            
+        }
+        return result;
+        
+    }
+    public int getRightMost(String s,Map<Character,List<Integer>> map,int start){
+        int end=map.get(s.charAt(start)).get(1);
+        
+        for(int i=start;i<=end;i++){
+            //if any inside substring has a start before this substring, then we will return -1,
+            //which means we cannot start a substring at index i as it contains a char whose start
+            //is less than this i .
+            if(map.get(s.charAt(i)).get(0)<start) return -1;
+            end=Math.max(end,map.get(s.charAt(i)).get(1));              
+        }
+        
+        return end;
+    }
+}
