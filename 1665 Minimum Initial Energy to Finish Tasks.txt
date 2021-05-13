@@ -1,0 +1,21 @@
+class Solution {
+    public int minimumEffort(int[][] tasks) {
+        //[[8,9],[10,11],[10,12],[1,3],[2,4]]
+        //[[1,7],[2,8],[3,9],[4,10],[5,11],[6,12]]
+        Arrays.sort(tasks,(int[]a, int[]b)->{
+           if(a[1]-a[0]==b[1]-b[0])
+               return a[1]-b[1];
+            return (a[1]-a[0])-(b[1]-b[0]);
+        });
+        int energy=0;
+        for(int i=0;i<tasks.length;i++)
+        {
+            if(energy+tasks[i][0]<tasks[i][1])
+                energy=tasks[i][1];
+            else
+                energy=energy+tasks[i][0];
+        }
+        return energy;
+        
+    }
+}
