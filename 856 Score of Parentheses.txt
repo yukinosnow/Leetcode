@@ -1,0 +1,66 @@
+class Solution {
+    int position=0;
+    public int scoreOfParentheses(String s) {
+        char[]word=s.toCharArray();
+        return helper(word);
+    }
+    public int helper(char[]word)
+    {
+        int localResult=0;
+        boolean left=false;
+        boolean count=false;
+        while(position<word.length)
+        {
+            if(word[position]=='(')
+            {
+                if(!left)
+                {
+                    left=true;
+                    position++;
+                }
+                else
+                {
+                    localResult+=2*helper(word);
+                    count=true;
+                }
+            }
+            else
+            {
+                if(!left)
+                    return localResult;
+                else
+                {
+                    position++;
+                    if(!count)
+                        localResult++;
+                    else
+                        count=false;
+                    left=false;
+                }
+                
+            }
+        }
+        return localResult;
+    }
+}
+
+class Solution {
+    public int scoreOfParentheses(String S) {
+    Stack<Integer> stack = new Stack();
+    stack.push(0); // The score of the current frame
+
+    for (char c: S.toCharArray()) {
+        if (c == '(')
+            stack.push(0);
+        else {
+            int v = stack.pop();
+            int w = stack.pop();
+            stack.push(w + Math.max(2 * v, 1));
+        }
+    }
+
+    return stack.pop();
+}
+}
+
+
