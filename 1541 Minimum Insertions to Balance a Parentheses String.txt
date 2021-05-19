@@ -1,0 +1,49 @@
+class Solution {
+    public int minInsertions(String s) {
+        Stack<Character> Stack=new Stack<Character>();
+        int result=0;
+        int i=0;
+        while(i<s.length())
+        {
+            if(s.charAt(i)=='(')
+            {
+                Stack.push(s.charAt(i));
+                i++;
+            }
+            else 
+            {
+                if(Stack.empty())
+                {
+                    if(i+1<s.length() && s.charAt(i+1)==')')
+                    {
+                        result++;
+                        i+=2;
+                    }
+                    else
+                    {
+                        result+=2;
+                        i++;
+                    }
+                }
+                else
+                {
+                    if(i+1<s.length() && s.charAt(i+1)==')')
+                        i+=2;
+                    else
+                    {
+                        result++;
+                        i++;
+                    }
+                    Stack.pop();
+                }
+            }
+        }
+        //if the string contains all character as ),then for each ( bal+=2
+        while(!Stack.empty())
+        {
+            Stack.pop();
+            result+=2;
+        }
+        return result;
+    }
+}
