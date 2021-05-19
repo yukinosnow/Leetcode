@@ -1,0 +1,30 @@
+class Solution {
+    public String minRemoveToMakeValid(String s) {
+        Stack<Integer>stack=new Stack<>();
+        Set<Integer>remove=new HashSet<>();
+        char[]word=s.toCharArray();
+        for(int i=0;i<word.length;i++)
+        {
+            if(word[i]=='(')
+            {
+                stack.push(i);
+            }
+            else if (word[i]==')')
+            {
+                if(stack.isEmpty())
+                    remove.add(i);
+                else
+                    stack.pop();
+            }
+        }
+        while(!stack.isEmpty())
+            remove.add(stack.pop());
+        StringBuilder sb=new StringBuilder();
+        for(int i=0;i<word.length;i++)
+        {
+            if(!remove.contains(i))
+                sb.append(word[i]);
+        }
+        return sb.toString();
+    }
+}
