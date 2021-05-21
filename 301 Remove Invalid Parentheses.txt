@@ -1,0 +1,45 @@
+class Solution {
+    int length=Integer.MIN_VALUE;
+    Set<String>set=new HashSet<>();
+    public List<String> removeInvalidParentheses(String s) {
+        char[]word=s.toCharArray();
+        helper(word,0,0,0,"");
+        List<String>result=new ArrayList<>();
+        for(String letter:set)
+            result.add(letter);
+        return result;
+    }
+    public void helper(char[]word, int position, int left, int right, String tempResult)
+    {
+        if(right>left)
+            return;
+        if(position==word.length)
+        {
+            if(left==right)
+            {
+                if(tempResult.length()>length)
+                {
+                    length=tempResult.length();
+                    set.clear();
+                    set.add(tempResult);
+                }
+                else if(tempResult.length()==length)
+                    set.add(tempResult);
+            }
+            return;
+        }
+        if(word[position]=='(')
+        {
+            helper(word,position+1,left+1,right,tempResult+Character.toString(word[position]));
+            helper(word,position+1,left,right,tempResult);
+        }
+        else if(word[position]==')')
+        {
+            if(left>right)
+                helper(word,position+1,left,right+1,tempResult+Character.toString(word[position]));
+            helper(word,position+1,left,right,tempResult);
+        }
+        else
+            helper(word,position+1,left,right,tempResult+Character.toString(word[position]));
+    }
+}
