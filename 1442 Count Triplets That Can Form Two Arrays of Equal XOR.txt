@@ -1,0 +1,30 @@
+class Solution {
+    public int countTriplets(int[] A) {
+        int result=0;
+        Map<Integer,Integer>freqs=new HashMap<>();
+        Map<Integer,Integer>count=new HashMap<>();
+        freqs.put(0,1);
+        count.put(0,-1);
+        int[]prefix=new int[A.length];
+        int prev=0;
+        for(int i=0;i<A.length;i++)
+        {
+            prefix[i]=prev^A[i];
+            prev=prefix[i];
+            if(freqs.containsKey(prev))
+            {
+                int sum=count.get(prev);
+                int freq=freqs.get(prev);
+                result+=freq*(i-1)-sum;
+                freqs.put(prev,freqs.get(prev)+1);
+                count.put(prev,count.get(prev)+i);
+            }
+            else
+            {
+                freqs.put(prev,1);
+                count.put(prev,i);
+            }
+        }
+        return result;
+    }
+}
