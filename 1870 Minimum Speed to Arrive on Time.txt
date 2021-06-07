@@ -1,0 +1,28 @@
+class Solution {
+    public int minSpeedOnTime(int[] dist, double hour) {
+        int left=1;
+        int right=10000000;
+        int mid=left+(right-left)/2;
+        while(left+1<right)
+        {
+            mid=left+(right-left)/2;
+            if(CalculateTime(mid,dist)<=hour)
+                right=mid;
+            else
+                left=mid;
+        }
+        if(CalculateTime(left,dist)<=hour)
+            return left;
+        if(CalculateTime(right,dist)<=hour)
+            return right;
+        return -1;
+    }
+    public double CalculateTime(int speed, int[]dist)
+    {
+        double totalTime=0;
+        for(int i=0;i<dist.length-1;i++)
+            totalTime+=Math.ceil((double)dist[i]/speed);
+        totalTime+=(double)dist[dist.length-1]/speed;
+        return totalTime;
+    }
+}
