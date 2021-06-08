@@ -1,0 +1,33 @@
+class Solution {
+    public int maxValue(int n, int index, int maxSum) {
+        int left=1;
+        int right=maxSum;
+        int mid=left+(right-left)/2;
+        while(left+1<right)
+        {
+            mid=left+(right-left)/2;
+            if(Check(mid,n,maxSum,index))
+                left=mid;
+            else
+                right=mid;
+        }
+        if(Check(right,n,maxSum,index))
+            return right;
+        else
+            return left;
+    }
+    public boolean Check(int maxValue, int n, int maxSum,int index)
+    {
+       return compute(n,index,maxValue)<=maxSum;
+    }
+    public long compute(long n, long m) {
+		if (m > n) {
+			return (m + (m - n + 1)) * n / 2;
+		} else {
+			return n - m + m * (m + 1) / 2;
+		}
+	}
+	public long compute(long n, long index, long m) {
+		return compute(index + 1, m) + compute(n - index, m) - m;
+	}
+}
