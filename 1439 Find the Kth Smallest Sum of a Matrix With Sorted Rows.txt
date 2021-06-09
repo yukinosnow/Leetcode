@@ -1,0 +1,36 @@
+class Solution {
+    public int kthSmallest(int[][] mat, int k) {
+        int m = mat.length, n = mat[0].length;
+        int left = m, right = m * 5000, ans = -1;
+        int mid=left+(right-left)/2;
+        while(left+1<right)
+        {
+            mid=left+(right-left)/2;
+            int size=countArraysHaveSumLessOrEqual(mat, m, n, mid, 0, 0, k);
+            if(size>=k)
+                right=mid;
+            else
+                left=mid;
+        }
+        int size1=countArraysHaveSumLessOrEqual(mat, m, n, left, 0, 0, k);;
+        if(size1>=k)
+            return left;
+        int size2=countArraysHaveSumLessOrEqual(mat, m, n, right, 0, 0, k);;
+        if(size2>=k)
+            return right;
+        return -1;
+        
+    }
+    public int countArraysHaveSumLessOrEqual(int[][] mat, int m, int n, int targetSum, int r, int sum, int k) {
+        if (sum > targetSum) return 0;
+        if (r == m) return 1;
+        int ans = 0;
+        for (int c = 0; c < n; ++c) {
+            int cnt = countArraysHaveSumLessOrEqual(mat, m, n, targetSum, r + 1, sum + mat[r][c], k - ans);
+            if (cnt == 0) break;
+            ans += cnt;
+            if (ans > k) break; // prune when count > k
+        }
+        return ans;
+    }
+}
