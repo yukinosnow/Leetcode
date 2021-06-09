@@ -1,0 +1,30 @@
+class Solution {
+    public int maxProfit(int[] inventory, int orders) {
+        int fact=1000000007;
+        long[]copy=new long[inventory.length+1];
+        for(int i=0;i<inventory.length;i++)
+            copy[i]=inventory[i];
+        Arrays.sort(copy);
+        int left=copy.length-2;
+        int right=copy.length-1;
+        long result=0;
+        while(left>=0)
+        {
+            if((copy[right]-copy[left])*(right-left)<=orders)
+            {
+                orders-=(copy[right]-copy[left])*(right-left);
+                result=result%fact+((copy[right]+copy[left]+1)*(copy[right]-copy[left])/2)*(right-left);
+                copy[right]=copy[left];
+                left--;
+            }
+            else
+                break;
+        }
+        int height=orders/(right-left);
+        int remain=orders-height*(right-left);
+        result=result%fact+((2*copy[right]-height+1)*height/2)*(right-left);
+        copy[right]-=height;
+        result=result%fact+copy[right]*remain;
+        return (int)(result%fact);
+    }
+}
