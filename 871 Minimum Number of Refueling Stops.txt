@@ -1,0 +1,29 @@
+class Solution {
+    public int minRefuelStops(int target, int startFuel, int[][] stations) {
+        PriorityQueue<Integer>pq=new PriorityQueue<>((a,b)->(b-a));
+        int tank=startFuel;
+        int position=0;
+        int result=0;
+        for(int i=0;i<stations.length;i++)
+        {
+            while(stations[i][0]-position>tank)
+            {
+                if(pq.isEmpty())
+                    return -1;
+                tank+=pq.remove();
+                result++;
+            }
+            tank-=stations[i][0]-position;
+            pq.add(stations[i][1]);
+            position=stations[i][0];
+        }
+        while(tank+position<target)
+        {
+            if(pq.isEmpty())
+                return -1;
+            tank+=pq.remove();
+            result++;
+        }
+        return result;
+    }
+}
