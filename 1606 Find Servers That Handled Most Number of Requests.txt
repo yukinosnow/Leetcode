@@ -1,0 +1,77 @@
+class Solution {
+    class Server{
+        int num;
+        int time;
+        public Server(int num, int time)
+        {
+            this.num=num;
+            this.time=time;
+        }
+    }
+    public List<Integer> busiestServers(int k, int[] arrival, int[] load) {
+        int[]serverStatus=new int[k];
+        int[]handleRequest=new int[k];
+        TreeMap<Integer,Server>availableServer=new TreeMap<>();
+        PriorityQueue<Server> busyServer=new PriorityQueue<>((Server a, Server b)->(a.time-b.time));
+        for(int i=0;i<k;i++)
+        {
+            Server server=new Server(i,0);
+            availableServer.put(i,server);
+        }
+        int currentTime=0;
+        for(int i=0;i<arrival.length;i++)
+        {
+            currentTime=arrival[i];
+            int loaded=load[i];
+            int startPosition=i%k;
+            MoveServerFromBusyToFree(busyServer,availableServer,currentTime);
+            Integer serverNum=availableServer.higherKey(startPosition-1);
+            if(serverNum==null)
+            {
+                serverNum=availableServer.higherKey(-1);
+                if(serverNum!=null)
+                {
+                    handleRequest[serverNum]++;
+                    Server temp=availableServer.remove(serverNum);
+                    temp.time=currentTime+loaded;
+                    busyServer.add(temp);
+                }
+            }
+            else
+            {
+                handleRequest[serverNum]++;
+                Server temp=availableServer.remove(serverNum);
+                temp.time=currentTime+loaded;
+                busyServer.add(temp);
+            }
+            
+        }
+        List<Integer>result=new ArrayList<>();
+        FindBusiestServer(result,handleRequest);
+        return result;
+    }
+    public void MoveServerFromBusyToFree(PriorityQueue<Server> busyServer,TreeMap<Integer,Server>availableServer,int currentTime)
+    {
+        while(!busyServer.isEmpty()&&busyServer.peek().time<=currentTime)
+        {
+            Server temp=busyServer.remove();
+            availableServer.put(temp.num,temp);
+        }
+    }
+    
+    public void FindBusiestServer(List<Integer>result,int[]handleRequest)
+    {
+        int maxLoad=0;
+        for(int i=0;i<handleRequest.length;i++)
+        {
+            if(maxLoad<handleRequest[i])
+            {
+                maxLoad=handleRequest[i];
+                result.clear();
+                result.add(i);
+            }
+            else if(maxLoad==handleRequest[i])
+                result.add(i);
+        }
+    }
+}
