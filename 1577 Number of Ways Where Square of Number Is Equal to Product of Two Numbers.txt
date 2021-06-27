@@ -36,3 +36,48 @@ class Solution {
         
     }
 }
+
+class Solution {
+    public int numTriplets(int[] nums1, int[] nums2) {
+        Map<Integer,Integer>map1=new HashMap<>();
+        Map<Integer,Integer>map2=new HashMap<>();
+        long[]prod1=new long[nums1.length];
+        long[]prod2=new long[nums2.length];
+        for(int i=0;i<nums1.length;i++)
+            prod1[i]=(long)nums1[i]*(long)nums1[i];
+        for(int i=0;i<nums2.length;i++)
+            prod2[i]=(long)nums2[i]*(long)nums2[i];
+        int result=0;
+        for(int i=0;i<nums2.length;i++)
+        {
+            int divider=nums2[i];
+            for(int j=0;j<prod1.length;j++)
+            {
+                long product=prod1[j];
+                if(product%divider!=0)
+                    continue;
+                int dividend=(int)(product/divider);
+                if(!map2.containsKey(dividend))
+                    continue;
+                result+=map2.get(dividend);
+            }
+            map2.put(divider,map2.getOrDefault(divider,0)+1);   
+        }
+        for(int i=0;i<nums1.length;i++)
+        {
+            int divider=nums1[i];
+            for(int j=0;j<prod2.length;j++)
+            {
+                long product=prod2[j];
+                if(product%divider!=0)
+                    continue;
+                int dividend=(int)(product/divider);
+                if(!map1.containsKey(dividend))
+                    continue;
+                result+=map1.get(dividend);
+            }
+            map1.put(divider,map1.getOrDefault(divider,0)+1);  
+        }
+        return result;
+    }
+}
