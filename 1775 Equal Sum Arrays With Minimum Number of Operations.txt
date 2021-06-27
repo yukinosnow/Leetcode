@@ -1,0 +1,88 @@
+class Solution {
+    public int minOperations(int[] nums1, int[] nums2) {
+        if(nums1.length>=nums2.length*6||nums1.length*6<nums2.length)
+            return -1;
+        int sum1=0;
+        int sum2=0;
+        for(int i=0;i<nums1.length;i++)
+            sum1+=nums1[i];
+        for(int i=0;i<nums2.length;i++)
+            sum2+=nums2[i];
+        Arrays.sort(nums1);
+        Arrays.sort(nums2);
+        int result=0;
+        int left1=0;
+        int left2=0;
+        int right1=nums1.length-1;
+        int right2=nums2.length-1;
+        int diff=sum2-sum1;
+        while(diff!=0)
+        {
+            if(diff>0)
+            {
+                if(left1<=right1&&left2<=right2)
+                {
+                    if(6-nums1[left1]>=nums2[right2]-1)
+                    {
+                        diff-=(6-nums1[left1]);
+                        left1++;
+                    }
+                    else
+                    {
+                        diff-=(nums2[right2]-1);
+                        right2--;
+                    }
+                }
+                else if(left1>right1)
+                {
+                    diff-=(nums2[right2]-1);
+                    right2--;
+                }
+                else
+                {
+                    diff-=(6-nums1[left1]);
+                    left1++;
+                }
+                
+                if(diff<=0)
+                {
+                    result++;
+                    break;
+                }
+            }
+            else
+            {
+                if(left1<=right1&&left2<=right2)
+                {
+                    if(nums1[right1]-1>=6-nums2[left2])
+                    {
+                        diff+=nums1[right1]-1;
+                        right1--;
+                    }
+                    else
+                    {
+                        diff+=(6-nums2[left2]);
+                        left2++;
+                    }
+                }
+                else if(left1>right1)
+                {
+                    diff+=(6-nums2[left2]);
+                    left2++;
+                }
+                else
+                {
+                    diff+=nums1[right1]-1;
+                    right1--;
+                }
+                if(diff>=0)
+                {
+                    result++;
+                    break;
+                }
+            }
+            result++;
+        }
+        return result;
+    }
+}
