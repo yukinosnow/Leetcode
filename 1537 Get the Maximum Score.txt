@@ -41,3 +41,45 @@ class Solution {
         return (int)(result%module);
     }
 }
+
+class Solution {
+    public int maxSum(int[] nums1, int[] nums2) {
+        int mod=1000000007;
+        long[]ref1=new long[nums1.length+1];
+        long[]ref2=new long[nums2.length+1];
+        int n1=0;
+        int n2=0;
+        while(n1<nums1.length&&n2<nums2.length)
+        {
+            if(nums1[n1]<nums2[n2])
+            {
+                ref1[n1+1]=ref1[n1]+nums1[n1];
+                n1++;
+            }
+            else if(nums1[n1]>nums2[n2])
+            {
+                ref2[n2+1]=ref2[n2]+nums2[n2];
+                n2++;
+            }
+            else
+            {
+                long max=Math.max(ref1[n1]+nums1[n1],ref2[n2]+nums2[n2]);
+                ref1[n1+1]=max;
+                ref2[n2+1]=max;
+                n1++;
+                n2++;
+            }
+        }
+        while(n1<nums1.length)
+        {
+            ref1[n1+1]=ref1[n1]+nums1[n1];
+            n1++;
+        }
+        while(n2<nums2.length)
+        {
+            ref2[n2+1]=ref2[n2]+nums2[n2];
+            n2++;
+        }
+        return (int)(Math.max(ref1[ref1.length-1],ref2[ref2.length-1])%1000000007);
+    }
+}
