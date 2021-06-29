@@ -1,0 +1,33 @@
+class Solution {
+    public List<List<Integer>> findRLEArray(int[][] encoded1, int[][] encoded2) {
+        List<List<Integer>>result=new ArrayList<>();
+        int n1=0;
+        int n2=0;
+        List<Integer>temp=new ArrayList<>();
+        temp.add(0);
+        temp.add(0);
+        while(n1<encoded1.length&&n2<encoded2.length)
+        {
+            int product=encoded1[n1][0]*encoded2[n2][0];
+            int count=Math.min(encoded1[n1][1],encoded2[n2][1]);
+            if(product==temp.get(0))
+                temp.set(1,temp.get(1)+count);
+            else
+            {
+                result.add(temp);
+                temp=new ArrayList<>();
+                temp.add(product);
+                temp.add(count);
+            }
+            encoded1[n1][1]-=count;
+            if(encoded1[n1][1]==0)
+                n1++;
+            encoded2[n2][1]-=count;
+            if(encoded2[n2][1]==0)
+                n2++;
+        }
+        result.add(temp);
+        result.remove(0);
+        return result;
+    }
+}
