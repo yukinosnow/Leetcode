@@ -1,0 +1,59 @@
+class Solution {
+    public int validSubarrays(int[] nums) {
+        int result=0;
+        Deque<Integer>dq=new LinkedList<>();
+        for(int i=0;i<nums.length;i++)
+        {
+            while(!dq.isEmpty()&&nums[dq.getLast()]>nums[i])
+            {
+                int pos=dq.removeLast();
+                result+=i-pos;
+            }
+            dq.addLast(i);
+        }
+        while(!dq.isEmpty())
+        {
+            int pos=dq.removeLast();
+            result+=nums.length-pos;
+        }
+        return result;
+    }
+}
+
+class Solution {
+    public int validSubarrays(int[] nums) {
+        int result=0;
+        int[]copy=new int[nums.length];
+        System.arraycopy(nums,0,copy,0,nums.length);
+        Arrays.sort(copy);
+        Map<Integer,List<Integer>>map=new HashMap<>();
+        for(int i=nums.length-1;i>=0;i--)
+        {
+            if(!map.containsKey(nums[i]))
+                map.put(nums[i],new ArrayList<Integer>());
+            List<Integer>list=map.get(nums[i]);
+            list.add(i);
+        }
+        TreeSet<Integer>ts=new TreeSet<>();
+        int prev=-1;
+        List<Integer>posCol=new ArrayList<>();
+        posCol.add(nums.length);
+        for(int i=0;i<copy.length;i++)
+        {
+            int value=copy[i];
+            if(value!=prev)
+            {
+                for(Integer temp:posCol)
+                    ts.add(temp);
+                posCol.clear();
+            }
+            prev=value;
+            List<Integer>positions=map.get(value);
+            int position=positions.remove(0);
+            Integer largePosition=ts.higher(position);
+            result+=largePosition-position;
+            posCol.add(position);
+        }
+        return result;
+    }
+}
