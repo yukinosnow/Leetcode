@@ -1,0 +1,108 @@
+class Skiplist {
+    class Node
+    {
+        Node next;
+        Node down;
+        int val;
+        public Node(int val)
+        {
+            this.val=val;
+        }
+    }
+    Node[]ref;
+    public Skiplist() {
+        ref=new Node[10];
+        for(int i=0;i<ref.length;i++)
+        {
+            ref[i]=new Node(-1);
+            Node tail=new Node(100000);
+            ref[i].next=tail;
+        }
+        for(int i=0;i<ref.length-1;i++)
+        {
+            ref[i].down=ref[i+1];
+            ref[i].next.down=ref[i+1].next;
+        }
+    }
+    
+    public boolean search(int target) {
+        return searchHelper(ref[0],target);
+    }
+    public boolean searchHelper(Node node, int target)
+    {
+        if(node==null)
+            return false;
+        if(node.val==target||node.next.val==target)
+            return true;
+        if(node.next.val<target)
+            return searchHelper(node.next,target);
+        return searchHelper(node.down,target);
+    }
+    public void add(int num) {
+        addHelper(ref[0],num);
+    }
+    public Node addHelper(Node node,int num)
+    {
+        Random rd=new Random();
+        if(node.down==null)
+        {
+            Node curr=node;
+            Node prev=null;
+            while(curr.val<=num)
+            {
+                if(curr.val==num)
+                    return null;
+                prev=curr;
+                curr=curr.next;
+            }
+            Node newNode=new Node(num);
+            newNode.next=curr;
+            prev.next=newNode;
+            int val=rd.nextInt(2);
+            if(val==0)
+                return null;
+            return newNode;
+        }
+        if(node.val==num||node.next.val==num)
+            return null;
+        Node returnNode=null;
+        if(node.next.val<num)
+            returnNode=addHelper(node.next,num);
+        else
+            returnNode=addHelper(node.down,num);
+        if(returnNode==null)
+            return null;
+        Node newNode=new Node(num);
+        newNode.next=node.next;
+        node.next=newNode;
+        newNode.down=returnNode;
+        int val=rd.nextInt(2);
+        if(val==0)
+            return null;
+        return newNode;
+    }
+    public boolean erase(int num) {
+        return eraseHelper(ref[0],num,false);
+    }
+    public boolean eraseHelper(Node node, int num,boolean found)
+    {
+        if(node==null)
+            return found;
+        if(node.next.val==num)
+        {
+            node.next=node.next.next;
+            return eraseHelper(node,num,true);
+        }
+        if(node.next.val<num)
+            return eraseHelper(node.next,num,found);
+        return eraseHelper(node.down,num,found);
+    }
+}
+
+/**
+ * Your Skiplist object will be instantiated and called as such:
+ * Skiplist obj = new Skiplist();
+ * boolean param_1 = obj.search(target);
+ * obj.add(num);
+ * boolean param_3 = obj.erase(num);
+ */
