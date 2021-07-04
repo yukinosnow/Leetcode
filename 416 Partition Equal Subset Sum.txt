@@ -1,0 +1,21 @@
+class Solution {
+    public boolean canPartition(int[] nums) {
+        int sum=0;
+        for(int i=0;i<nums.length;i++)
+            sum+=nums[i];
+        if(sum%2!=0)
+            return false;
+        sum/=2;
+        int[][]ref=new int[nums.length+1][sum+1];
+        for(int i=0;i<nums.length;i++)
+        {
+            for(int j=1;j<=sum;j++)
+            {
+                ref[i+1][j]=Math.max(ref[i][j],ref[i+1][j-1]);
+                if(j-nums[i]>=0)
+                    ref[i+1][j]=Math.max(ref[i+1][j],ref[i][j-nums[i]]+nums[i]);
+            }
+        }
+        return ref[ref.length-1][sum]==sum;
+    }
+}
