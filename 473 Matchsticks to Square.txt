@@ -1,0 +1,39 @@
+class Solution {
+    public boolean makesquare(int[] matchsticks) {
+        int sum=0;
+        for(int i=0;i<matchsticks.length;i++)
+            sum+=matchsticks[i];
+        if(sum%4!=0)
+            return false;
+        sum=sum/4;
+        int[]lengths=new int[4];
+        Arrays.sort(matchsticks);
+        return helper(lengths,matchsticks.length-1,matchsticks,sum);
+        
+    }
+    public boolean helper(int[]lengths, int position, int[]matchsticks,int max)
+    {
+        if(position<0)
+        {
+            for(int i=0;i<lengths.length;i++)
+            {
+                if(lengths[i]!=max)
+                    return false;
+            }
+            return true;
+        }
+        int l=matchsticks[position];
+        for(int i=0;i<lengths.length;i++)
+        {
+            if(lengths[i]+l<=max)
+            {
+                lengths[i]+=l;
+                boolean check=helper(lengths,position-1,matchsticks,max);
+                if(check)
+                    return true;
+                lengths[i]-=l;
+            }
+        }
+        return false;
+    }
+}
