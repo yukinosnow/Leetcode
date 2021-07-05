@@ -1,0 +1,15 @@
+class Solution {
+    public int change(int amount, int[] coins) {
+        int[]ref=new int[amount+1];
+        ref[0]=1;
+        Arrays.sort(coins);
+        for(int j=0;j<coins.length;j++)
+        {
+            for(int i=coins[j];i<=amount;i++)
+            {
+                ref[i]+=ref[i-coins[j]];
+            }
+        }
+        return ref[amount];
+    }
+}
