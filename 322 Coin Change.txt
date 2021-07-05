@@ -1,0 +1,59 @@
+in the top down structure, we need to identify three stages.
+1. has not been visited: 0/Integer.MAX_VALUE
+2. cannot make this number: -1
+3. can make this number: num
+
+class Solution {
+    public int coinChange(int[] coins, int amount) {
+        int[]map=new int[amount+1];
+        Arrays.fill(map,Integer.MAX_VALUE);
+        int result=helper(coins,amount,map);
+        if(result==Integer.MAX_VALUE)
+            return -1;
+        return result;
+    }
+    public int helper(int[]coins, int remain, int[]map)
+    {
+        if(remain<0)
+            return -1;
+        if(map[remain]!=Integer.MAX_VALUE)
+            return map[remain];
+        if(remain==0)
+        {
+            map[remain]=0;
+            return map[remain];
+        }
+        int min=Integer.MAX_VALUE;
+        for(int i=0;i<coins.length;i++)
+        {
+            int val=helper(coins,remain-coins[i],map);
+            if(val>=0&&val<min)
+                min=val+1;
+        }
+        map[remain]=(min==Integer.MAX_VALUE)?-1:min;
+        return map[remain];
+        
+    }
+}
+
+botton up
+class Solution {
+    public int coinChange(int[] coins, int amount) {
+        int[]ref=new int[amount+1];
+        Arrays.fill(ref,Integer.MAX_VALUE/2);
+        ref[0]=0;
+        Arrays.sort(coins);
+        for(int i=1;i<=amount;i++)
+        {
+            for(int j=0;j<coins.length;j++)
+            {
+                if(i-coins[j]<0)
+                    break;
+                ref[i]=Math.min(ref[i],ref[i-coins[j]]+1);
+            }
+        }
+        if(ref[amount]==Integer.MAX_VALUE/2)
+            return -1;
+        return ref[amount];
+    }
+}
