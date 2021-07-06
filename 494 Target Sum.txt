@@ -1,0 +1,48 @@
+class Solution {
+    public int findTargetSumWays(int[] nums, int target) {
+        Map<Integer,Integer>map=new HashMap<>();
+        Map<Integer,Integer>copy=new HashMap<>();
+        map.put(0,1);
+        for(int i=0;i<nums.length;i++)
+        {
+            for(Map.Entry<Integer,Integer>entry:map.entrySet())
+            {
+                int key=entry.getKey();
+                int val=entry.getValue();
+                copy.put(key+nums[i],map.getOrDefault(key,0)+copy.getOrDefault(key+nums[i],0));
+                copy.put(key-nums[i],map.getOrDefault(key,0)+copy.getOrDefault(key-nums[i],0));
+            }
+            map.clear();
+            for(Map.Entry<Integer,Integer>entry:copy.entrySet())
+            {
+                int key=entry.getKey();
+                int val=entry.getValue();
+                map.put(key,copy.getOrDefault(key,0));
+            }
+            copy.clear();
+        }
+        return map.getOrDefault(target,0);
+    }
+    
+}
+
+
+class Solution {
+    int result=0;
+    public int findTargetSumWays(int[] nums, int target) {
+        helper(nums,target,0);
+        return result;
+    }
+    public void helper(int[] nums, int remain, int position)
+    {
+        if(position>=nums.length)
+        {
+            if(remain==0)
+                result++;
+            return;
+        }
+        helper(nums,remain+nums[position],position+1);
+        helper(nums,remain-nums[position],position+1);
+    }
+    
+}
