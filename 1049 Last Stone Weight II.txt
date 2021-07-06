@@ -1,0 +1,85 @@
+O(ln) using HasSet
+class Solution {
+    public int lastStoneWeightII(int[] stones) {
+        TreeSet<Integer>map=new TreeSet<>();
+        TreeSet<Integer>copy=new TreeSet<>();
+        map.add(0);
+        for(int i=0;i<stones.length;i++)
+        {
+            for(Integer key:map)
+            {
+                copy.add(key+stones[i]);
+                copy.add(key-stones[i]);
+            }
+            map.clear();
+            for(Integer key:copy)
+            {
+                map.add(key);
+            }
+            copy.clear();
+        }
+        Integer result=map.ceiling(0);
+        if(result==null)
+            return 0;
+        return (int)result;
+    }
+}
+
+O(ln) using array
+class Solution {
+    public int lastStoneWeightII(int[] stones) {
+        int sum=0;
+        for(int i=0;i<stones.length;i++)
+            sum+=stones[i];
+        int[]map=new int[2*sum+1];
+        int[]copy=new int[2*sum+1];
+        map[0+sum]=1;
+        for(int i=0;i<stones.length;i++)
+        {
+            for(int j=0;j<map.length;j++)
+            {
+                if(map[j]!=0)
+                {
+                    copy[j-stones[i]]++;
+                    copy[j+stones[i]]++;
+                }
+                
+            }
+            Arrays.fill(map,0);
+            for(int j=0;j<copy.length;j++)
+            {
+                if(copy[j]!=0)
+                {
+                    map[j]++;
+                }
+            }
+            Arrays.fill(copy,0);
+        }
+        for(int i=sum;i<map.length;i++)
+        {
+            if(map[i]!=0)
+                return i-sum;
+        }
+        return -1;
+    }
+}
+
+O(ln) using knapsack
+class Solution {
+    public int lastStoneWeightII(int[] stones) {
+        int sum=0;
+        for(int i=0;i<stones.length;i++)
+            sum+=stones[i];
+        int[][]ref=new int[stones.length+1][sum/2+1];
+        for(int i=0;i<stones.length;i++)
+        {
+            for(int j=1;j<ref[0].length;j++)
+            {
+                ref[i+1][j]=Math.max(ref[i][j],ref[i+1][j-1]);
+                if(j-stones[i]>=0)
+                    ref[i+1][j]=Math.max(ref[i+1][j],ref[i][j-stones[i]]+stones[i]);
+            }
+        }
+        return sum-2*ref[ref.length-1][ref[0].length-1];
+    }
+}
