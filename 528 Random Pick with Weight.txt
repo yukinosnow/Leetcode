@@ -1,0 +1,33 @@
+class Solution {
+    int[]ref;
+    public Solution(int[] w) {
+        ref=new int[w.length];
+        ref[0]=w[0];
+        for(int i=1;i<ref.length;i++)
+            ref[i]=w[i]+ref[i-1];
+    }
+    
+    public int pickIndex() {
+        Random rd=new Random();
+        int position=rd.nextInt(ref[ref.length-1])+1;
+        int left=0;
+        int right=ref.length-1;
+        while(left+1<right)
+        {
+            int mid=left+(right-left)/2;
+            if(ref[mid]<position)
+                left=mid;
+            else
+                right=mid;
+        }
+        if(ref[left]>=position)
+            return left;
+        return right;
+    }
+}
+
+/**
+ * Your Solution object will be instantiated and called as such:
+ * Solution obj = new Solution(w);
+ * int param_1 = obj.pickIndex();
+ */
