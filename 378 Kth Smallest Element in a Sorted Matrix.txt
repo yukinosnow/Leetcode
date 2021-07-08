@@ -1,0 +1,33 @@
+class Solution {
+    public int kthSmallest(int[][] matrix, int k) {
+        int left=matrix[0][0];
+        int right=matrix[matrix.length-1][matrix[0].length-1];
+        int total=matrix.length*matrix.length;
+        while(left+1<right)
+        {
+            int mid=left+(right-left)/2;
+            if(FindPositon(matrix,mid)<k)//because the array is sort in no-decreasing order
+                left=mid;
+            else
+                right=mid;
+        }
+        if(FindPositon(matrix,left)>=k)//because the array is sort in no-decreasing order
+            return left;
+        return right;
+    }
+    public int FindPositon(int[][]matrix,int val)
+    {
+        int row=matrix.length-1;
+        int col=0;
+        int result=0;
+        while(row>=0&&col<matrix[0].length)
+        {
+            if(matrix[row][col]>val)
+                row--;
+            else
+                result+=row+1;
+                col++;
+        }
+        return result;
+    }
+}
