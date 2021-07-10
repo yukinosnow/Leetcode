@@ -1,0 +1,15 @@
+class Solution {
+    public boolean PredictTheWinner(int[] nums) {
+        int[][]ref=new int[nums.length][nums.length];
+        for(int i=0;i<ref.length;i++)
+            ref[i][i]=nums[i];
+        for(int i=1;i<nums.length;i++)
+        {
+            for(int j=0;j+i<nums.length;j++)
+            {
+                ref[j][j+i]=Math.max(nums[j]-ref[j+1][j+i],nums[i+j]-ref[j][i+j-1]);
+            }
+        }
+        return ref[0][nums.length-1]>=0;
+    }
+}
