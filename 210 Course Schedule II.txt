@@ -1,0 +1,62 @@
+class Solution {
+    public int[] findOrder(int numCourses, int[][] prerequisites) {
+        List<Integer>tempResult=new ArrayList<>();
+        Map<Integer,Set<Integer>>prev=new HashMap<>();
+        Map<Integer,Set<Integer>>next=new HashMap<>();
+        Queue<Integer>processing=new LinkedList<>();
+        Queue<Integer>nextRound=new LinkedList<>();
+        Set<Integer>visited=new HashSet<>();
+        BuildCourse(numCourses,prerequisites,prev,next);
+        for(Map.Entry<Integer,Set<Integer>>entry:prev.entrySet())
+        {
+            if(entry.getValue().size()==0)
+                nextRound.add(entry.getKey());
+        }
+        while(!nextRound.isEmpty())
+        {
+            Set<Integer>tempVisited=new HashSet<>();
+            while(!nextRound.isEmpty())
+                processing.add(nextRound.remove());
+            while(!processing.isEmpty())
+            {
+                int course=processing.remove();
+                tempResult.add(course);
+                Set<Integer>nextCourses=next.get(course);
+                for(Integer nextCourse:nextCourses)
+                {
+                    if(visited.contains(nextCourse))
+                        continue;
+                    Set<Integer>prevCourses=prev.get(nextCourse);
+                    prevCourses.remove(course);
+                    if(prevCourses.size()==0)
+                        nextRound.add(nextCourse);
+                }
+                tempVisited.add(course);
+            }
+            visited.addAll(tempVisited);
+        }
+        if(tempResult.size()!=numCourses)
+            return new int[0];
+        int[]result=new int[numCourses];
+        for(int i=0;i<tempResult.size();i++)
+            result[i]=tempResult.get(i);
+        return result;
+    }
+    public void BuildCourse(int numCourse, int[][] prerequisites, Map<Integer,Set<Integer>>prev, Map<Integer,Set<Integer>>next)
+    {
+        for(int i=0;i<numCourse;i++)
+        {
+            prev.put(i,new HashSet<Integer>());
+            next.put(i,new HashSet<Integer>());
+        }
+        for(int i=0;i<prerequisites.length;i++)
+        {
+            int prevC=prerequisites[i][1];
+            int nextC=prerequisites[i][0];
+            Set<Integer>prevCourses=prev.get(nextC);
+            prevCourses.add(prevC);
+            Set<Integer>nextCourses=next.get(prevC);
+            nextCourses.add(nextC);
+        }
+    }
+}
