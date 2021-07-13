@@ -1,0 +1,55 @@
+class Solution {
+    public boolean canFinish(int numCourses, int[][] prerequisites) {
+        Map<Integer,Set<Integer>>prev=new HashMap<>();
+        Map<Integer,Set<Integer>>next=new HashMap<>();
+        Queue<Integer>processing=new LinkedList<>();
+        Queue<Integer>nextRound=new LinkedList<>();
+        Set<Integer>visited=new HashSet<>();
+        BuildCourse(numCourses,prerequisites,prev,next);
+        for(Map.Entry<Integer,Set<Integer>>entry:prev.entrySet())
+        {
+            if(entry.getValue().size()==0)
+                nextRound.add(entry.getKey());
+        }
+        while(!nextRound.isEmpty())
+        {
+            Set<Integer>tempVisited=new HashSet<>();
+            while(!nextRound.isEmpty())
+                processing.add(nextRound.remove());
+            while(!processing.isEmpty())
+            {
+                int course=processing.remove();
+                Set<Integer>nextCourses=next.get(course);
+                for(Integer nextCourse:nextCourses)
+                {
+                    if(visited.contains(nextCourse))
+                        continue;
+                    Set<Integer>prevCourses=prev.get(nextCourse);
+                    prevCourses.remove(course);
+                    if(prevCourses.size()==0)
+                        nextRound.add(nextCourse);
+                }
+                tempVisited.add(course);
+            }
+            visited.addAll(tempVisited);
+        }
+        return visited.size()==numCourses;
+    }
+    public void BuildCourse(int numCourse, int[][] prerequisites, Map<Integer,Set<Integer>>prev, Map<Integer,Set<Integer>>next)
+    {
+        for(int i=0;i<numCourse;i++)
+        {
+            prev.put(i,new HashSet<Integer>());
+            next.put(i,new HashSet<Integer>());
+        }
+        for(int i=0;i<prerequisites.length;i++)
+        {
+            int prevC=prerequisites[i][1];
+            int nextC=prerequisites[i][0];
+            Set<Integer>prevCourses=prev.get(nextC);
+            prevCourses.add(prevC);
+            Set<Integer>nextCourses=next.get(prevC);
+            nextCourses.add(nextC);
+        }
+    }
+}
