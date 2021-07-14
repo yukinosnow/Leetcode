@@ -34,3 +34,31 @@ class Solution {
         return length-start;
     }
 }
+
+class Solution {
+    public List<List<Integer>> subsetsWithDup(int[] nums) {
+        int prev=-11;
+        List<List<Integer>>result=new ArrayList<>();
+        Arrays.sort(nums);
+        int start=0;
+        int prevSize=0;
+        result.add(new ArrayList<Integer>());
+        for(int i=0;i<nums.length;i++)
+        {
+            start=0;
+            if(nums[i]==prev)
+                start=prevSize;
+            prev=nums[i];
+            prevSize=result.size();
+            List<List<Integer>>temp=new ArrayList<>();
+            for(int j=start;j<result.size();j++)
+            {
+                List<Integer>copy=new ArrayList<>(result.get(j));
+                copy.add(nums[i]);
+                temp.add(copy);
+            }
+            result.addAll(temp);
+        }
+        return result;
+    }
+}
