@@ -1,0 +1,24 @@
+class Solution {
+    int result=0;
+    public int maxUniqueSplit(String s) {
+        Set<String>duplication=new HashSet<>();
+        helper(s,duplication);
+        
+        return result;
+    }
+    public void helper(String s, Set<String>duplication)
+    {
+        if(s.length()==0)
+            result=Math.max(result,duplication.size());
+        for(int i=1;i<=s.length();i++)
+        {
+            if(!duplication.contains(s.substring(0,i)))
+            {
+                duplication.add(s.substring(0,i));
+                helper(s.substring(i,s.length()),duplication);
+                duplication.remove(s.substring(0,i));
+                
+            }
+        }
+    }
+}
