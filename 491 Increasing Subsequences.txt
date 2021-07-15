@@ -1,0 +1,53 @@
+class Solution {
+    List<List<Integer>>tempResult=new ArrayList<>();
+    public List<List<Integer>> findSubsequences(int[] nums) {
+        Integer[]num=new Integer[nums.length];
+        for(int i=0;i<num.length;i++)
+            num[i]=nums[i];
+        helper(num,0,new ArrayList<Integer>());
+        Set<String>visited=new HashSet<>();
+        List<List<Integer>>result=new ArrayList<>();
+        for(int i=0;i<tempResult.size();i++)
+        {
+            String check="";
+            List<Integer>comb=tempResult.get(i);
+            for(int j=0;j<comb.size();j++)
+                check+=Integer.toString(comb.get(j))+",";
+            if(!visited.contains(check))
+            {
+                result.add(comb);
+                visited.add(check);
+            }
+        }
+        return result;
+    }
+    public void helper(Integer[]nums, int position, List<Integer>temp)
+    {
+        if(position>=nums.length)
+        {
+            if(temp.size()!=1)
+                tempResult.add(new ArrayList<Integer>(temp));
+            return;
+        }
+        for(int i=position;i<nums.length;i++)
+        {
+            if(temp.size()==0)
+            {
+                temp.add(nums[i]);
+                helper(nums,i+1,temp);
+                temp.remove(nums[i]);
+            }
+            else
+            {
+                if(temp.get(temp.size()-1)<=nums[i])
+                {
+                    temp.add(nums[i]);
+                    helper(nums,nums.length,temp);
+                    helper(nums,i+1,temp);
+                    temp.remove(nums[i]);
+                }
+            }
+        }
+        
+    }
+}
