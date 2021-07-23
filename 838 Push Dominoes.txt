@@ -1,0 +1,50 @@
+class Solution {
+    public String pushDominoes(String dominoes) {
+        char[]word=dominoes.toCharArray();
+        int[]left=new int[word.length];
+        int[]right=new int[word.length];
+        int prev=Integer.MAX_VALUE/2;
+        for(int i=0;i<word.length;i++)
+        {
+            if(word[i]=='L')
+                right[i]=Integer.MAX_VALUE/2;
+            else if(word[i]=='.')
+            {
+                if(prev!=Integer.MAX_VALUE/2)
+                    right[i]=right[i-1]+1;
+                else
+                  right[i]=Integer.MAX_VALUE/2;  
+            }
+            else
+                right[i]=1;
+            prev=right[i];
+        }
+        prev=Integer.MAX_VALUE/2;
+        for(int i=word.length-1;i>=0;i--)
+        {
+            if(word[i]=='R')
+                left[i]=Integer.MAX_VALUE/2;
+            else if(word[i]=='.')
+            {
+                if(prev!=Integer.MAX_VALUE/2)
+                    left[i]=left[i+1]+1;
+                else
+                  left[i]=Integer.MAX_VALUE/2;  
+            }
+            else
+                left[i]=1;
+            prev=left[i];
+        }
+        StringBuilder result=new StringBuilder();
+        for(int i=0;i<left.length;i++)
+        {
+            if(left[i]==right[i])
+                result.append('.');
+            else if(left[i]<right[i])
+                result.append('L');
+            else
+                result.append('R');
+        }
+        return result.toString();
+    }
+}
