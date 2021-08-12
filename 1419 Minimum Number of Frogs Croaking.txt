@@ -1,0 +1,78 @@
+class Solution {
+    public int minNumberOfFrogs(String croakOfFrogs) {
+        List<Character>list=new ArrayList<>();
+        int maxOccure=0;
+        char[]word=croakOfFrogs.toCharArray();
+        Map<Character,Character>map=new HashMap<>();
+        map.put('r','c');
+        map.put('o','r');
+        map.put('a','o');
+        map.put('k','a');
+        for(int i=0;i<word.length;i++)
+        {
+            boolean added=false;
+            char letter=word[i];
+            if(letter=='c')
+                list.add(letter);
+            else
+            {
+                char prev=map.get(letter);
+                for(int j=0;j<list.size();j++)
+                {
+                    if(list.get(j)==prev)
+                    {
+                        added=true;
+                        if(letter=='k')
+                            list.remove(j);
+                        else
+                            list.set(j,letter);
+                        break;
+                    }
+                }
+                if(!added)
+                    return -1;
+            }
+            maxOccure=Math.max(list.size(),maxOccure);
+        }
+        if(list.size()!=0)
+            return -1;
+        return maxOccure;
+    }
+}
+
+class Solution {
+    public int minNumberOfFrogs(String croakOfFrogs) {
+        int c=0,r=0,o=0,a=0,k=0,count=0;
+        int result=0;
+        char[]word=croakOfFrogs.toCharArray();
+        for(int i=0;i<word.length;i++)
+        {
+            if(word[i]=='c')
+            {
+                c++;
+                count++;
+            }
+            else if(word[i]=='r')
+                r++;
+            else if(word[i]=='o')
+                o++;
+            else if(word[i]=='a')
+                a++;
+            else
+            {
+                k++;
+                count--;
+            }
+            result=Math.max(result,count);
+            if(c<r||r<o||o<a||a<k)
+                return -1;
+        }
+        if(count==0)
+        {
+            int check=c;
+            if(r==check&&o==check&&a==check&&k==check)
+                return result;
+        }
+        return -1;
+    }
+}
