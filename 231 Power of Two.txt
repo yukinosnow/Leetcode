@@ -1,0 +1,38 @@
+class Solution {
+    public boolean isPowerOfTwo(int n) {
+        if(n<=0)
+            return false;
+        double temp=Math.log(n)/Math.log(2);
+        int check=(int)temp;
+        if(check==(int)Math.ceil(temp-1E-9)&&check==(int)Math.floor(temp+1E-9))
+            return true;
+        return false;
+    }
+}
+
+class Solution {
+    public boolean isPowerOfTwo(int n) {
+        if(n<=0)
+            return false;
+        while(n>0)
+        {
+            if(n==1)
+                return true;
+            if(n%2!=0)
+                return false;
+            n=n/2;
+        }
+        return true;
+    }
+}
+
+class Solution {
+    public boolean isPowerOfTwo(int n) {
+        if(n<=0)
+            return false;
+        if(n==1)
+            return true;
+        long x=(long)n;
+        return ((x&(-x)))==x;
+    }
+}
