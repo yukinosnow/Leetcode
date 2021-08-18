@@ -1,0 +1,37 @@
+class Solution {
+    public int missingNumber(int[] nums) {
+        boolean mark0=false;
+        for(int i=0;i<nums.length;i++)
+        {
+            int location=Math.abs(nums[i]);
+            if(location<nums.length&&nums[location]>0)
+                nums[location]=-nums[location];
+            else if(location<nums.length&&nums[location]==0)
+                mark0=true;
+        }
+        int position0=-1;
+        int position=-1;
+        for(int i=0;i<nums.length;i++)
+        {
+            if(nums[i]==0)
+                position0=i;
+            if(nums[i]>0)
+                position=i;
+        }
+        if(position==-1&&!mark0)
+            return position0;
+        if(position==-1&&mark0)
+            return nums.length;
+        return position;
+    }
+}
+
+class Solution {
+    public int missingNumber(int[] nums) {
+        int missing = nums.length;
+        for (int i = 0; i < nums.length; i++) {
+            missing ^= i ^ nums[i];
+        }
+        return missing;
+    }
+}
