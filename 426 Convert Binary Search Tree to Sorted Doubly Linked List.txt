@@ -1,0 +1,30 @@
+class Solution {
+    Node first=null;
+    Node curr=first;
+    public Node treeToDoublyList(Node root) {
+        if(root==null)
+            return null;
+        Travel(root);
+        first.left=curr;
+        curr.right=first;
+        return first;
+    }
+    public void Travel(Node node)
+    {
+        if(node==null)
+            return;
+        Travel(node.left);
+        if(curr==null)
+        {
+            first=node;
+            curr=first;
+        }
+        else
+        {
+            node.left=curr;
+            curr.right=node;
+            curr=node;
+        }
+        Travel(node.right);
+    }
+}
