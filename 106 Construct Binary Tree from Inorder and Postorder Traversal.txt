@@ -19,3 +19,28 @@ class Solution {
         return node;
     }
 }
+
+class Solution {
+    int count=0;
+    public TreeNode buildTree(int[] inorder, int[] postorder) {
+        count=postorder.length-1;
+        Map<Integer,Integer>map=new HashMap<>();
+        for(int i=0;i<inorder.length;i++)
+            map.put(inorder[i],i);
+        return helper(inorder,postorder,0,inorder.length-1,map);
+    }
+    public TreeNode helper(int[]inorder, int[]postorder, int left, int right,Map<Integer,Integer>map)
+    {
+        if(count<0||left>right)
+            return null;
+        TreeNode node=new TreeNode(postorder[count]);
+        count--;
+        if(left==right)
+            return node;
+        int mid=map.get(node.val);
+        node.right=helper(inorder,postorder,mid+1,right,map);
+        node.left=helper(inorder,postorder,left,mid-1,map);
+        return node;
+        
+    }
+}
