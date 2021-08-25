@@ -1,0 +1,23 @@
+class Solution {
+    int count=0;
+    public TreeNode bstFromPreorder(int[] preorder) {
+        return helper(preorder,Integer.MAX_VALUE);
+    }
+    public TreeNode helper(int[]preorder,int parent)
+    {
+        if(count>=preorder.length)
+            return null;
+        TreeNode node=new TreeNode(preorder[count]);
+        count++;
+        if(count>=preorder.length)
+            return node;
+        if(node.val>preorder[count])
+            node.left=helper(preorder,node.val);
+        if(count>=preorder.length)
+            return node;
+        if(node.val<preorder[count]&&parent>preorder[count])
+            node.right=helper(preorder,parent);
+        return node;
+        
+    }
+}
