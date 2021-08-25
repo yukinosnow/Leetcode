@@ -1,0 +1,32 @@
+class Solution {
+    int preCount=0;
+    int postCount=0;
+    public TreeNode constructFromPrePost(int[] pre, int[] post) {
+        return helper(pre,post);   
+    }
+    public TreeNode helper(int[]pre, int[]post)
+    {
+        if(preCount>pre.length)
+            return null;
+        TreeNode node=new TreeNode(pre[preCount]);
+        preCount++;
+        if(node.val==post[postCount])
+        {
+            postCount++;
+            return node;
+        }
+        node.left=helper(pre,post);
+        if(node.val==post[postCount])
+        {
+            postCount++;
+            return node;
+        }
+        node.right=helper(pre,post);
+        if(node.val==post[postCount])
+        {
+            postCount++;
+            return node;
+        }
+        return node;
+    }
+}
