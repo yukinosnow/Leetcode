@@ -1,0 +1,24 @@
+class Solution {
+    public int distinctSubseqII(String s) {
+        int mod=(int)1e9+7;
+        int[]arr=new int[26];
+        char[]word=s.toCharArray();
+        long result=0;
+        for(int i=0;i<word.length;i++)
+        {
+            long sum=0;
+            int position=(int)(word[i]-'a');
+            for(int j=0;j<26;j++)
+            {
+                if(j==position)
+                    continue;
+                sum+=arr[j];
+            }
+            arr[position]=(int)((arr[position]+sum+1)%mod);
+        }
+        for(int i=0;i<26;i++)
+            result+=arr[i];
+        return(int)(result%mod);
+        
+    }
+}
