@@ -1,0 +1,98 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+public class Codec {
+    
+    // Encodes a tree to a single string.
+    public String serialize(TreeNode root) {
+        return "["+helper(root)+"]";
+    }
+    public String helper(TreeNode node)
+    {
+        if(node==null)
+            return "";
+        String left=helper(node.left);
+        left="["+left+"]";
+        String right=helper(node.right);
+        right="["+right+"]";
+        return node.val+","+left+","+right;
+    }
+
+    // Decodes your encoded data to tree.
+    public TreeNode deserialize(String data) {
+        int val=-1;
+        data=data.substring(1,data.length()-1);
+        char[]word=data.toCharArray();
+        TreeNode node=null;
+        int count=0;
+        int left=0;//this parameter is to determined if we have set the left child or not
+        int right=0;//this parameter is to determined if the next branch is right
+        int negative=0;//this parameter is to detemined if the number is negative
+        while(count<data.length())
+        {
+            int potentialVal=(int)(word[count])-'0';
+            if(word[count]==',')
+            {
+                if(val!=-1)
+                {
+                    if(negative==1)
+                    {
+                        val=-val;
+                        negative=0;
+                    }
+                    node=new TreeNode(val);
+                    val=-1;
+                    left=1;//this parameter is to determined if we have set the left child or not
+                }
+                else
+                {
+                    left=0;
+                    right=1;//this parameter is to determined if the next branch is right
+                }
+            }
+            else if(word[count]=='[')
+            {
+                int balance=1;
+                int temp=count+1;
+                while(balance!=0)
+                {
+                    if(word[temp]=='[')
+                        balance++;
+                    else if(word[temp]==']')
+                        balance--;
+                    temp++;
+                }
+                String childString=data.substring(count,temp);
+                TreeNode child=deserialize(childString);
+                if(left==1)
+                    node.left=child;
+                else if(right==1)
+                    node.right=child;
+                count=temp-1;
+            }
+            else if(potentialVal>=0&&potentialVal<=9)
+            {
+                if(val==-1)
+                    val=0;
+                val=val*10+potentialVal;
+            }
+            else if(word[count]=='-')
+            {
+                negative=1;//this parameter is to detemined if the number is negative
+            }
+            count++;
+        }
+        return node;
+    }
+}
+
+// Your Codec object will be instantiated and called as such:
+// Codec ser = new Codec();
+// Codec deser = new Codec();
+// TreeNode ans = deser.deserialize(ser.serialize(root));
