@@ -1,0 +1,29 @@
+class Solution {
+    private int result=0;
+    public int numIslands(char[][] grid) {
+        if(grid.length==0||grid[0].length==0)
+            return 0;
+        for(int i=0;i<grid.length;i++)
+        {
+            for(int j=0;j<grid[0].length;j++)
+            {
+                if(grid[i][j]=='1')
+                {
+                    result++;
+                    MergeIsland(grid,i,j);
+                }
+            }
+        }
+        return result;
+    }
+    public void MergeIsland(char[][]grid, int y, int x)
+    {
+        if(x<0||x>=grid[0].length||y<0||y>=grid.length||grid[y][x]=='0')
+            return;
+        grid[y][x]='0';
+        MergeIsland(grid,y,x+1);
+        MergeIsland(grid,y,x-1);
+        MergeIsland(grid,y+1,x);
+        MergeIsland(grid,y-1,x);
+    }
+}
