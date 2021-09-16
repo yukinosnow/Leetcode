@@ -1,0 +1,42 @@
+class Solution {
+    private int result=0;
+    public int maxLength(List<String> arr) {
+        if(arr.size()==0)
+            return result;
+        List<Character>ref=new ArrayList<>();
+        helper(arr,0,ref);
+        return result;
+    }
+    public void helper(List<String> arr, int location, List<Character>ref)
+    {
+        if(location>=arr.size())
+        {
+            result=Math.max(result,ref.size());
+            return;
+        }
+        for(int i=location;i<arr.size();i++)
+        {
+            List<Character>copy=new ArrayList<>(ref);
+            String word=arr.get(i);
+            char[]letter=word.toCharArray();
+            boolean exist=false;
+            for(int j=0;j<letter.length;j++)
+            {
+                if(copy.contains(letter[j]))
+                {
+                    exist=true;
+                    break;
+                }
+                copy.add(letter[j]);
+            }
+            if(!exist)
+            {
+                helper(arr,i+1,copy);
+            }
+            else
+            {
+                result=Math.max(result,ref.size());
+            }
+        }
+    }
+}
