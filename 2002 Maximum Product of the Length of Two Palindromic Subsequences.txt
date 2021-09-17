@@ -1,0 +1,46 @@
+class Solution {
+    public int maxProduct(String s) {
+        char[]word=s.toCharArray();
+        Map<Integer,String>map=new HashMap<>();
+        BuildAllPalindromic(word,map,0,0,"");
+        int result=0;
+        for(Map.Entry<Integer,String>entry1:map.entrySet())
+        {
+            String word1=entry1.getValue();
+            int num1=entry1.getKey();
+            for(Map.Entry<Integer,String>entry2:map.entrySet())
+            {
+                String word2=entry2.getValue();
+                int num2=entry2.getKey();
+                if((num1&num2)!=0)
+                    continue;
+                result=Math.max(result,word1.length()*word2.length());
+            }
+        }
+        return result;
+    }
+    public void BuildAllPalindromic(char[]word,Map<Integer,String>map,int position, int sum,String s)
+    {
+        if(IsPalindromic(s))
+            map.put(sum,s);
+        if(position>=word.length)
+            return;
+        BuildAllPalindromic(word,map,position+1,sum,s);
+        BuildAllPalindromic(word,map,position+1,sum+(1<<position),s+Character.toString(word[position]));
+    }
+    public boolean IsPalindromic(String s)
+    {
+        char[]word=s.toCharArray();
+        int left=0;
+        int right=word.length-1;
+        while(left<right)
+        {
+            if(word[left]!=word[right])
+                return false;
+            left++;
+            right--;
+        }
+        return true;
+            
+    }
+}
