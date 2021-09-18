@@ -1,0 +1,80 @@
+class Solution {
+    public int minFlips(int[][] mat) {
+        Set<Integer>visited=new HashSet<>();
+        Queue<Integer>nextRound=new LinkedList<>();
+        Queue<Integer>processing=new LinkedList<>();
+        int start=ConvertToNum(mat);
+        nextRound.add(start);
+        int step=0;
+        while(!nextRound.isEmpty())
+        {
+            while(!nextRound.isEmpty())
+                processing.add(nextRound.remove());
+            while(!processing.isEmpty())
+            {
+                int num=processing.remove();
+                if(num==0)
+                    return step;
+                if(visited.contains(num))
+                    continue;
+                visited.add(num);
+                List<Integer> nextNums=ConvertToNextNum(num,mat.length,mat[0].length);
+                nextRound.addAll(nextNums);
+            }
+            step++;
+        }
+        return -1;
+    }
+    public List<Integer>ConvertToNextNum(int num, int height, int width)
+    {
+        int[][]mat=new int[height][width];
+        int factor=(int)Math.pow(2,height*width-1);//watch out the factor
+        List<Integer>list=new ArrayList<>();
+        for(int i=0;i<height;i++)
+        {
+            for(int j=0;j<width;j++)
+            {
+                if(num>=factor)
+                {
+                    mat[i][j]=1;
+                    num-=factor;
+                }
+                factor/=2;
+            }
+        }
+        for(int i=0;i<height;i++)
+        {
+            for(int j=0;j<width;j++)
+            {
+                FlipNum(mat,i,j,height,width);
+                list.add(ConvertToNum(mat));
+                FlipNum(mat,i,j,height,width);
+            }
+        }
+        return list;
+    }
+    public void FlipNum(int[][]mat,int i, int j,int height,int width)
+    {
+        mat[i][j]=-(mat[i][j]-1);//need to change itself
+        if(j-1>=0)//sign needs to be equal
+            mat[i][j-1]=-(mat[i][j-1]-1);
+        if(j+1<width)
+            mat[i][j+1]=-(mat[i][j+1]-1);
+        if(i-1>=0)
+            mat[i-1][j]=-(mat[i-1][j]-1);
+        if(i+1<height)
+            mat[i+1][j]=-(mat[i+1][j]-1);
+    }
+    public int ConvertToNum(int[][]mat)
+    {
+        int num=0;
+        for(int i=0;i<mat.length;i++)
+        {
+            for(int j=0;j<mat[0].length;j++)
+            {
+                num=num*2+mat[i][j];
+            }
+        }
+        return num;
+    }
+}
