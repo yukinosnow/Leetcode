@@ -1,0 +1,18 @@
+class Solution {
+    public int stoneGameVII(int[] stones) {
+        int[]prefixSum=new int[stones.length+1];
+        int[][]dp=new int[stones.length][stones.length];
+        for(int i=1;i<prefixSum.length;i++)
+        {
+            prefixSum[i]=prefixSum[i-1]+stones[i-1];
+        }
+        for(int i=1;i<stones.length;i++)
+        {
+            for(int j=0;j+i<stones.length;j++)
+            {
+                dp[j][j+i]=Math.max(prefixSum[i+j]-prefixSum[j]-dp[j][j+i-1],prefixSum[i+j+1]-prefixSum[j+1]-dp[j+1][j+i]);
+            }
+        }
+        return dp[0][stones.length-1];
+    }
+}
