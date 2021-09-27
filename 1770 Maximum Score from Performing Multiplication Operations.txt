@@ -1,0 +1,22 @@
+class Solution {
+    public int maximumScore(int[] nums, int[] multipliers) {
+        int[][]ref=new int[multipliers.length][multipliers.length];
+        int offset=nums.length-multipliers.length;
+        int length=multipliers.length-1;
+        for(int i=0;i+offset<nums.length;i++)
+        {
+            int mul=multipliers[length];
+            ref[0][i]=Math.max(nums[i]*mul,nums[i+offset]*mul);
+        }
+        for(int i=1;i<multipliers.length;i++)
+        {
+            int right=offset+i;
+            int mul=multipliers[length-i];
+            for(int j=0;j+right<nums.length;j++)
+            {
+                ref[i][j]=Math.max(nums[j]*mul+ref[i-1][j+1],nums[j+right]*mul+ref[i-1][j]);
+            }
+        }
+        return ref[ref.length-1][0];
+    }
+}
