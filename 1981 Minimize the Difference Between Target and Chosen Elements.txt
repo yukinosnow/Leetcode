@@ -1,0 +1,32 @@
+class Solution {
+    public int minimizeTheDifference(int[][] mat, int target) {
+        int[]ref=new int[800*3];
+        int[]result=new int[800*3];
+        for(int i=0;i<mat[0].length;i++)
+            ref[mat[0][i]]=1;
+        for(int i=1;i<mat.length;i++)
+        {
+            for(int j=0;j<ref.length;j++)
+            {
+                if(ref[j]==1)
+                {
+                    for(int k=0;k<mat[0].length;k++)
+                    {
+                        if(j+mat[i][k]<result.length)
+                            result[j+mat[i][k]]=1;
+                    }
+                }
+            }
+            System.arraycopy(result,0,ref,0,ref.length);
+            Arrays.fill(result,0);
+        }
+        int minDiff=Integer.MAX_VALUE;
+        for(int i=0;i<ref.length;i++)
+        {
+            if(ref[i]==1)
+                minDiff=Math.min(minDiff,Math.abs(target-i));
+        }
+        return minDiff;
+        
+    }
+}
