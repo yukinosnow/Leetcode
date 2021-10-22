@@ -1,0 +1,25 @@
+class Solution {
+    public int countRoutes(int[] locations, int start, int finish, int fuel) {
+        int mod=1000000007;
+        long[][]ref=new long[fuel+1][locations.length];
+        ref[fuel][start]=1;
+        for(int i=fuel-1;i>=0;i--)
+        {
+            for(int j=0;j<ref[0].length;j++)
+            {
+                for(int k=0;k<ref[0].length;k++)
+                {
+                    if(j==k)
+                        continue;
+                    int prePosition=i+Math.abs(locations[j]-locations[k]);
+                    if(prePosition<ref.length)
+                        ref[i][j]=(ref[i][j]+ref[prePosition][k])%mod;
+                }
+            }
+        }
+        long total=0;
+        for(int i=0;i<ref.length;i++)
+            total=(total+ref[i][finish])%mod;
+        return (int)total;
+    }
+}
