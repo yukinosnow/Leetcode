@@ -1,0 +1,62 @@
+class Solution {
+    public int maxNonOverlapping(int[] nums, int target) {
+        int[]ref=new int[nums.length];
+        Map<Integer,List<Integer>>map=new HashMap<>();
+        List<Integer>list=new ArrayList<>();
+        list.add(-1);
+        map.put(0,list);
+        int sum=0;
+        for(int i=0;i<nums.length;i++)
+        {
+            sum+=nums[i];
+            if(map.containsKey(sum-target))
+            {
+                List<Integer>locations=map.get(sum-target);
+                for(Integer location:locations)
+                {
+                    if(location==-1)
+                        ref[i]=1;
+                    else
+                        ref[i]=Math.max(ref[i],ref[location]+1);
+                }
+            }
+            if(i==0)
+                ref[i]=Math.max(0,ref[i]);
+            else
+                ref[i]=Math.max(ref[i-1],ref[i]);
+            if(!map.containsKey(sum))
+                map.put(sum,new ArrayList<Integer>());
+            map.get(sum).add(i);
+        }
+        
+        return ref[ref.length-1];
+    }
+}
+
+class Solution {
+    public int maxNonOverlapping(int[] nums, int target) {
+        int[]ref=new int[nums.length];
+        Map<Integer,Integer>map=new HashMap<>();
+        map.put(0,-1);
+        int sum=0;
+        for(int i=0;i<nums.length;i++)
+        {
+            sum+=nums[i];
+            if(map.containsKey(sum-target))
+            {
+                int location=map.get(sum-target);
+                if(location==-1)
+                    ref[i]=1;
+                else
+                    ref[i]=Math.max(ref[i],ref[location]+1);
+            }
+            if(i==0)
+                ref[i]=Math.max(0,ref[i]);
+            else
+                ref[i]=Math.max(ref[i-1],ref[i]);
+            map.put(sum,i);
+        }
+        
+        return ref[ref.length-1];
+    }
+}
