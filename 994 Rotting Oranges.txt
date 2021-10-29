@@ -1,0 +1,60 @@
+class Solution {
+    int[][]direction=new int[][]{{0,1},{0,-1},{1,0},{-1,0}};
+    public int orangesRotting(int[][] grid) {
+        if(!CheckOrangeExist(grid,1))
+            return 0;
+        if(!CheckOrangeExist(grid,2))
+            return -1;
+        Queue<int[]>nextRound=new LinkedList<>();
+        Queue<int[]>processing=new LinkedList<>();
+        FindStartNode(grid,nextRound);
+        int step=0;
+        while(!nextRound.isEmpty())
+        {
+            while(!nextRound.isEmpty())
+                processing.add(nextRound.remove());
+            while(!processing.isEmpty())
+            {
+                int[]cor=processing.remove();
+                int y=cor[0];
+                int x=cor[1];
+                if(y<0||y>=grid.length||x<0||x>=grid[0].length||grid[y][x]!=1)
+                    continue;
+                grid[y][x]=2;
+                for(int k=0;k<direction.length;k++)
+                    nextRound.add(new int[]{y+direction[k][0],x+direction[k][1]});
+            }
+            step++;
+        }
+        if(CheckOrangeExist(grid,1))
+            return -1;
+        return step-1;
+        
+    }
+    public void FindStartNode(int[][]grid, Queue<int[]>nextRound)
+    {
+        for(int i=0;i<grid.length;i++)
+        {
+            for(int j=0;j<grid[0].length;j++)
+            {
+                if(grid[i][j]==2)
+                {
+                    for(int k=0;k<direction.length;k++)
+                        nextRound.add(new int[]{i+direction[k][0],j+direction[k][1]});
+                }
+            }
+        }
+    }
+    public boolean CheckOrangeExist(int[][]grid, int status)
+    {
+        for(int i=0;i<grid.length;i++)
+        {
+            for(int j=0;j<grid[0].length;j++)
+            {
+                if(grid[i][j]==status)
+                    return true;
+            }
+        }
+        return false;
+    }
+}
