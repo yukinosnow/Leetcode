@@ -1,0 +1,35 @@
+class Solution {
+    Map<Integer,Long>map;
+    int mod=1000000007;
+    public int numberOfArrays(String s, int k) {
+        map=new HashMap<>();
+        char[]word=s.toCharArray();
+        return (int)helper(word,0,k);
+    }
+    public long helper(char[]word, int position, int k)
+    {
+        if(position>=word.length)
+        {
+            map.put(position,(long)1);
+            return 1;
+        }
+        if(map.containsKey(position))
+            return map.get(position);
+        long sum=0;
+        if(word[position]=='0')
+            return 0;
+        else
+        {
+            long val=0;
+            for(int i=position;i<word.length;i++)
+            {
+                val=val*10+(int)(word[i]-'0');
+                if(val>k)
+                    break;
+                sum=(sum+helper(word,i+1,k))%mod;
+            }
+        }
+        map.put(position,sum);
+        return sum%mod;
+    }
+}
