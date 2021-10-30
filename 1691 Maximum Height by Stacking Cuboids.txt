@@ -1,0 +1,29 @@
+class Solution {
+    Map<Integer,List<Integer>>map=new HashMap<>();
+    public int maxHeight(int[][] cuboids) {
+        for(int i=0;i<cuboids.length;i++)
+            Arrays.sort(cuboids[i]);
+        Arrays.sort(cuboids,(int[]a, int[]b)->{
+            if(a[0]!=b[0])
+                return a[0]-b[0];
+            else if(a[1]!=b[1])
+                return a[1]-b[1];
+            else
+                return a[2]-b[2];
+        });
+        int[]ref=new int[cuboids.length];
+        int result=0;
+        for(int i=0;i<cuboids.length;i++)
+        {
+            ref[i]=cuboids[i][2];
+            for(int j=0;j<i;j++)
+            {
+                if(cuboids[j][0]<=cuboids[i][0]&&cuboids[j][1]<=cuboids[i][1]&&cuboids[j][2]<=cuboids[i][2])
+                    ref[i]=Math.max(ref[i],ref[j]+cuboids[i][2]);
+            }
+            result=Math.max(ref[i],result);
+        }
+        return result;
+        
+    }
+}
