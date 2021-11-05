@@ -1,0 +1,67 @@
+class Solution {
+    public List<String> fullJustify(String[] words, int maxWidth) {
+        List<String>result=new ArrayList<>();
+        List<String>word=new ArrayList<>();
+        int wordLength=0;
+        for(int i=0;i<words.length;i++)
+        {
+            if(wordLength+words[i].length()+word.size()>maxWidth)
+            {
+                result.add(ProcessString(word,maxWidth,wordLength,false));
+                word.clear();
+                wordLength=0;
+            }
+            word.add(words[i]);
+            wordLength+=words[i].length();
+        }
+        if(word.size()!=0)
+            result.add(ProcessString(word,maxWidth,wordLength,true));
+        return result;
+    }
+    public String ProcessString(List<String>word, int maxWidth,int wordLength,boolean lastLine)
+    {
+        int totalSpaceLength=maxWidth-wordLength;
+        int spaceCount=Math.max(word.size()-1,1);
+        int spaceLength=totalSpaceLength/spaceCount;
+        int remain=totalSpaceLength%spaceCount;
+        List<Integer>spaces=new ArrayList<>();
+        for(int i=0;i<spaceCount;i++)
+        {
+            int spaceDis=spaceLength;
+            if(remain>0)
+            {
+                spaceDis++;
+                remain--;
+            }
+            spaces.add(spaceDis);
+        }
+        StringBuilder sb=new StringBuilder();
+        if(lastLine)
+        {
+            for(int i=0;i<word.size();i++)
+            {
+                sb.append(word.get(i));
+                if(i<spaces.size()&&spaces.get(i)!=0)
+                    sb.append(' ');
+            }
+            int remainSpace=maxWidth-sb.toString().length();
+            for(int i=0;i<remainSpace;i++)
+                sb.append(' ');
+        }
+        else
+        {
+            for(int i=0;i<word.size();i++)
+            {
+                sb.append(word.get(i));
+                if(i<spaces.size())
+                {
+                    int numSpace=spaces.get(i);
+                    for(int j=0;j<numSpace;j++)
+                        sb.append(' ');
+                }
+            }
+        }
+        return sb.toString();
+        
+    }
+}
