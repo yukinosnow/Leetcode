@@ -1,0 +1,70 @@
+class Solution {
+    public int[] pathsWithMaxScore(List<String> input) {
+        int mod=1000000007;
+        int[][]board=new int[input.size()][input.get(0).length()];
+        int[][]ref=new int[board.length][board[0].length];
+        int[][]step=new int[board.length][board[0].length];
+        step[step.length-1][step[0].length-1]=1;//need to initial the beginning step
+        for(int i=0;i<board.length;i++)
+        {
+            String s=input.get(i);
+            char[]word=s.toCharArray();
+            for(int j=0;j<word.length;j++)
+            {
+                if(word[j]=='X')
+                    board[i][j]=Integer.MIN_VALUE;
+                else if(word[j]=='E'||word[j]=='S')
+                    board[i][j]=0;
+                else
+                    board[i][j]=(int)(word[j]-'0');
+            }
+        }
+        for(int i=board.length-2;i>=0;i--)
+        {
+            if(board[i][ref[0].length-1]==Integer.MIN_VALUE||ref[i+1][ref[0].length-1]==Integer.MIN_VALUE)
+                ref[i][ref[0].length-1]=Integer.MIN_VALUE;
+            else
+            {
+                ref[i][ref[0].length-1]=ref[i+1][ref[0].length-1]+board[i][ref[0].length-1];
+                step[i][ref[0].length-1]=1;
+            }
+        }
+        for(int j=board[0].length-2;j>=0;j--)
+        {
+            if(board[ref.length-1][j]==Integer.MIN_VALUE||ref[ref.length-1][j+1]==Integer.MIN_VALUE)
+                ref[ref.length-1][j]=Integer.MIN_VALUE;
+            else
+            {
+                ref[ref.length-1][j]=ref[ref.length-1][j+1]+board[ref.length-1][j];
+                step[ref.length-1][j]=1;
+            }
+        }
+        
+        for(int i=board.length-2;i>=0;i--)
+        {
+            for(int j=board[0].length-2;j>=0;j--)
+            {
+                if(board[i][j]!=Integer.MIN_VALUE)
+                    ref[i][j]=Math.max(ref[i+1][j+1],Math.max(ref[i+1][j],ref[i][j+1]))+board[i][j];
+                else
+                    ref[i][j]=Integer.MIN_VALUE;
+            }
+        }
+        for(int i=board.length-2;i>=0;i--)
+        {
+            for(int j=board[0].length-2;j>=0;j--)
+            {
+                if(ref[i][j]==Integer.MIN_VALUE||board[i][j]==Integer.MIN_VALUE)
+                    continue;
+                if(ref[i+1][j+1]!=Integer.MIN_VALUE&&ref[i+1][j+1]+board[i][j]==ref[i][j])
+                    step[i][j]=(step[i][j]+step[i+1][j+1])%mod;
+                if(ref[i+1][j]!=Integer.MIN_VALUE&&ref[i+1][j]+board[i][j]==ref[i][j])
+                    step[i][j]=(step[i][j]+step[i+1][j])%mod;
+                if(ref[i][j+1]!=Integer.MIN_VALUE&&ref[i][j+1]+board[i][j]==ref[i][j])
+                    step[i][j]=(step[i][j]+step[i][j+1])%mod;
+            }
+        }
+        int[]result=new int[]{Math.max(ref[0][0],0),step[0][0]};
+        return result;
+    }
+}
