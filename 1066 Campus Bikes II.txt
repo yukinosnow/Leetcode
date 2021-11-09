@@ -1,0 +1,24 @@
+class Solution {
+    int memo [] = new int[1024];
+    public int assignBikes(int[][] workers, int[][] bikes) {
+        Arrays.fill(memo,-1);
+        return helper(workers,bikes,0,0);
+    }
+    public int helper(int[][]workers, int[][]bikes, int position, int mask)
+    {
+        if(position>=workers.length)
+            return 0;
+        if(memo[mask]!=-1)
+            return memo[mask];
+        int result=Integer.MAX_VALUE;
+        for(int i=0;i<bikes.length;i++)
+        {
+            if((mask&(1<<i))!=0)
+                continue;
+            int distance=Math.abs(workers[position][0]-bikes[i][0])+Math.abs(workers[position][1]-bikes[i][1]);
+            result=Math.min(result,helper(workers,bikes,position+1,mask | (1 << i))+distance);
+        }
+        memo[mask]=result;
+        return result;
+    }
+}
