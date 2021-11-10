@@ -1,0 +1,42 @@
+class Solution {
+    public int maxCompatibilitySum(int[][] students, int[][] mentors) {
+        int[][]ref=new int[students.length][mentors.length];
+        for(int i=0;i<students.length;i++)
+        {
+            for(int j=0;j<mentors.length;j++)
+            {
+                ref[i][j]=CompareResult(students[i],mentors[j]);
+            }
+        }
+        int[]memo=new int[256];
+        Arrays.fill(memo,-1);
+        return FindPair(students,mentors,0,memo,0,ref);
+        
+    }
+    public int CompareResult(int[]student, int[]mentor)
+    {
+        int result=0;
+        for(int i=0;i<student.length;i++)
+        {
+            if(student[i]==mentor[i])
+                result++;
+        }
+        return result;
+    }
+    public int FindPair(int[][]students, int[][]mentors, int position, int[]memo, int mask,int[][]ref)
+    {
+        if(position>=students.length)
+            return 0;
+        if(memo[mask]!=-1)
+            return memo[mask];
+        int max=0;
+        for(int i=0;i<mentors.length;i++)
+        {
+            if((mask&(1<<i))!=0)
+                continue;
+            max=Math.max(max,FindPair(students,mentors,position+1,memo,mask|(1<<i),ref)+ref[position][i]);
+        }
+        memo[mask]=max;
+        return max;
+    }
+}
