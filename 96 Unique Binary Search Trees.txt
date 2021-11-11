@@ -1,0 +1,27 @@
+class Solution {
+    int[]ref;
+    public int numTrees(int n) {
+        if(n==0)
+            return 0;
+        if(n==1)
+            return 1;
+        ref=new int[n+1];
+        Arrays.fill(ref,-1);
+        ref[0]=1;
+        ref[1]=1;
+        int result=0;
+        for(int i=0;i<n;i++)
+            result+=FindComb(i)*FindComb(n-i-1);
+        return result;
+    }
+    public int FindComb(int pos)
+    {
+        if(ref[pos]!=-1)
+            return ref[pos];
+        int result=0;
+        for(int i=0;i<pos;i++)
+            result+=FindComb(i)*FindComb(pos-i-1);
+        ref[pos]=result;
+        return result;
+    }
+}
