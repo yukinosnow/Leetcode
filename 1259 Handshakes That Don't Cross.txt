@@ -1,0 +1,24 @@
+class Solution {
+    long[]ref;
+    int mod=1000000007;
+    public int numberOfWays(int num_people) {
+        ref=new long[num_people+1];
+        Arrays.fill(ref,-1);
+        return (int)(FindComb(num_people)%mod);
+    }
+    public long FindComb(int n)
+    {
+        long result=0;
+        if(n==0)
+            return 1;
+        if(n==2)
+            return 1;
+        if(ref[n]!=-1)
+            return ref[n];
+        for(int i=0;i<=n-2;i+=2)
+            result=(result+FindComb(0+i)%mod*FindComb(n-2-i)%mod)%mod;
+        ref[n]=result;
+        return result;
+        
+    }
+}
