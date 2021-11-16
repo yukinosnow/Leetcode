@@ -1,0 +1,58 @@
+class DetectSquares {
+    int[][]map;
+    public DetectSquares() {
+        map=new int[1001][1001];
+    }
+    
+    public void add(int[] point) {
+        int x=point[0];
+        int y=point[1];
+        map[y][x]++;
+    }
+    
+    public int count(int[] point) {
+        int x=point[0];
+        int y=point[1];
+        int minLength=Math.min(x,y);
+        int xcor=x-minLength;
+        int ycor=y-minLength;
+        int result=0;
+        while(xcor<=1000&&ycor<=1000)
+        {
+            if(ycor!=y&&xcor!=x)
+            {
+                int countLeftBottom=map[ycor][xcor];
+                int countLeftTop=map[y][xcor];
+                int countrightBottom=map[ycor][x];
+                result+=countLeftBottom*countLeftTop*countrightBottom;
+            }
+            ycor++;
+            xcor++;
+            
+        }
+        minLength=Math.min(point[0],1000-y);
+        xcor=x-minLength;
+        ycor=y+minLength;
+        while(xcor<=1000&&ycor>=0)
+        {
+            if(ycor!=y&&xcor!=x)
+            {
+                int countLeftBottom=map[ycor][xcor];
+                int countLeftTop=map[y][xcor];
+                int countrightBottom=map[ycor][x];
+                result+=countLeftBottom*countLeftTop*countrightBottom;
+            }
+            ycor--;
+            xcor++;
+            
+        }
+        return result;
+    }
+}
+
+/**
+ * Your DetectSquares object will be instantiated and called as such:
+ * DetectSquares obj = new DetectSquares();
+ * obj.add(point);
+ * int param_2 = obj.count(point);
+ */
