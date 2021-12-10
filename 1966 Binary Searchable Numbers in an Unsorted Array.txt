@@ -1,0 +1,42 @@
+class Solution {
+    public int binarySearchableNumbers(int[] nums) {
+        Stack<Integer>stack=new Stack<>();
+        int max=Integer.MIN_VALUE;
+        for(int i=0;i<nums.length;i++)
+        {
+            while(!stack.isEmpty()&&stack.peek()>nums[i])
+                stack.pop();
+            if(max<nums[i])
+                stack.push(nums[i]);
+            max=Math.max(nums[i],max);
+        }
+        return stack.size();
+    }
+}
+
+class Solution {
+    public int binarySearchableNumbers(int[] nums) {
+        int[]leftMax=new int[nums.length];
+        int[]rightMin=new int[nums.length];
+        int max=Integer.MIN_VALUE;
+        int min=Integer.MAX_VALUE;
+        int result=0;
+        for(int i=0;i<nums.length;i++)
+        {
+            max=Math.max(nums[i],max);
+            leftMax[i]=max;
+        }
+        for(int i=nums.length-1;i>=0;i--)
+        {
+            min=Math.min(nums[i],min);
+            rightMin[i]=min;
+        }
+        for(int i=0;i<nums.length;i++)
+        {
+            if(nums[i]>=leftMax[i]&&nums[i]<=rightMin[i])
+                result++;
+        }
+        return result;
+        
+    }
+}

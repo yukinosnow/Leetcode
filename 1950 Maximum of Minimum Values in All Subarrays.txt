@@ -1,0 +1,38 @@
+class Solution {
+    public int[] findMaximums(int[] nums) {
+        Stack<Integer>stack=new Stack<>();
+        int[]result=new int[nums.length];
+        Arrays.fill(result,-1);
+        for(int i=0;i<nums.length;i++)
+        {
+            while(!stack.isEmpty()&&nums[stack.peek()]>nums[i])
+            {
+                int val=nums[stack.pop()];
+                int end=-1;
+                if(!stack.isEmpty())
+                    end=stack.peek();
+                int position=i-end-1;
+                result[position-1]=Math.max(result[position-1],val);
+            }
+            stack.add(i);
+        }
+        while(!stack.isEmpty())
+        {
+            int val=nums[stack.pop()];
+            int end=-1;
+            if(!stack.isEmpty())
+                end=stack.peek();
+            int position=nums.length-end-1;
+            result[position-1]=Math.max(result[position-1],val);
+        }
+        int prevVal=result[result.length-1];
+        for(int i=result.length-2;i>=0;i--)
+        {
+            if(result[i]<prevVal)
+                result[i]=prevVal;
+            else
+                prevVal=result[i];
+        }
+        return result;
+    }
+}

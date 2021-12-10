@@ -1,0 +1,39 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+    public List<Integer> closestKValues(TreeNode root, double target, int k) {
+        List<Integer>result=new ArrayList<>();
+        InOrder(root,result,target,k);
+        return result;
+    }
+    public void InOrder(TreeNode node, List<Integer>result,double target, int k)
+    {
+        if(node==null)
+            return;
+        InOrder(node.left,result,target,k);
+        if(result.size()<k)
+            result.add(node.val);
+        else
+        {
+            if(Math.abs(result.get(0)-target)>Math.abs(node.val-target))
+            {
+                result.remove(0);
+                result.add(node.val);
+            }
+        }
+        InOrder(node.right,result,target,k);
+    }
+}

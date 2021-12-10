@@ -1,0 +1,84 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+    
+    public List<Integer> boundaryOfBinaryTree(TreeNode root) {
+        List<TreeNode>leftBoundry=new ArrayList<>();
+        List<TreeNode>rightBoundry=new ArrayList<>();
+        List<TreeNode>leaves=new ArrayList<>();
+        List<TreeNode>list=new ArrayList<>();
+        List<Integer>result=new ArrayList<>();
+        FindLeftBoundry(root.left,leftBoundry);
+        FindRightBoundry(root.right,rightBoundry);
+        FindLeaves(root,leaves);
+        Collections.reverse(rightBoundry);
+        list.add(root);
+        for(TreeNode left:leftBoundry)
+        {
+            if(!list.contains(left))
+                list.add(left);
+        }
+        for(TreeNode leaf:leaves)
+        {
+            if(!list.contains(leaf))
+                list.add(leaf);
+        }
+        for(TreeNode right:rightBoundry)
+        {
+            if(!list.contains(right))
+                list.add(right);
+        }
+        for(TreeNode node:list)
+            result.add(node.val);
+        return result;
+    }
+    public void FindLeftBoundry(TreeNode node,List<TreeNode>leftBoundry)
+    {
+        if(node==null)
+            return;
+        leftBoundry.add(node);
+        if(node.left==null&&node.right==null)
+            return;
+        else if(node.left==null)
+            FindLeftBoundry(node.right,leftBoundry);
+        else
+            FindLeftBoundry(node.left,leftBoundry);
+    }
+    public void FindRightBoundry(TreeNode node,List<TreeNode>rightBoundry)
+    {
+        if(node==null)
+            return;
+        rightBoundry.add(node);
+        if(node.left==null&&node.right==null)
+            return;
+        else if(node.right==null)
+            FindRightBoundry(node.left,rightBoundry);
+        else
+            FindRightBoundry(node.right,rightBoundry);
+    }
+    public void FindLeaves(TreeNode node, List<TreeNode>leaves)
+    {
+        if(node==null)
+            return;
+        if(node.left==null&&node.right==null)
+        {
+            leaves.add(node);
+            return;
+        }
+        FindLeaves(node.left,leaves);
+        FindLeaves(node.right,leaves);
+    }
+}
