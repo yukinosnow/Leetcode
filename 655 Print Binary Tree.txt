@@ -1,0 +1,82 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+    public List<List<String>> printTree(TreeNode root) {
+        List<List<TreeNode>>nodeValue=new ArrayList<>();
+        Queue<TreeNode>nextRound=new LinkedList<>();
+        Queue<TreeNode>processing=new LinkedList<>();
+        List<List<String>>result=new ArrayList<>();
+        nextRound.add(root);
+        while(!nextRound.isEmpty())
+        {
+            List<TreeNode>list=new ArrayList<>();
+            boolean hasNode=false;
+            while(!nextRound.isEmpty())
+            {
+                TreeNode node=nextRound.remove();
+                if(node!=null)
+                    hasNode=true;
+                processing.add(node);
+            }
+            if(!hasNode)
+                break;
+            while(!processing.isEmpty())
+            {
+                TreeNode node=processing.remove();
+                list.add(node);
+                if(node==null)
+                {
+                    nextRound.add(null);
+                    nextRound.add(null);
+                }
+                else
+                {
+                    nextRound.add(node.left);
+                    nextRound.add(node.right);
+                }
+            }
+            nodeValue.add(list);
+        }
+        int prefix=0;
+        int gap=1;
+        for(int i=nodeValue.size()-1;i>=0;i--)
+        {
+            List<TreeNode>list=nodeValue.remove(i);
+            List<String>temp=new ArrayList<>();
+            for(int j=0;j<prefix;j++)
+                temp.add("");
+            for(int j=0;j<list.size();j++)
+            {
+                TreeNode node=list.get(j);
+                if(node==null)
+                    temp.add("");
+                else
+                    temp.add(Integer.toString(node.val));
+                if(j!=list.size()-1)
+                {
+                    for(int k=0;k<gap;k++)
+                        temp.add("");
+                }
+            }
+            for(int j=0;j<prefix;j++)
+                temp.add("");
+            prefix=prefix*2+1;
+            gap=gap*2+1;
+            result.add(0,temp);
+        }
+        return result;
+    }
+}
